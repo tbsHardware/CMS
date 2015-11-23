@@ -1,3 +1,5 @@
 <?php
 
-return [];
+return [
+    'adminEmail' => 'vzorin@studio-wb.ru'
+];
