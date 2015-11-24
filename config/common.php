@@ -1,26 +1,30 @@
 <?php
 
-$params = array_merge(
+$params = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
 
 return [
-    'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'basePath' => dirname(__DIR__),
+    'bootstrap' => ['log'],
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
             'charset' => 'utf8',
         ],
-    ],
-    'log' => [
-        'traceLevel' => YII_DEBUG ? 3 : 0,
-        'targets' => [
-            [
-                'class' => 'yii\log\FileTarget',
-                'levels' => ['error', 'warning'],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
             ],
+        ],
+        'user' => [ // Переделать
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => true,
         ],
     ],
     'params' => $params,
