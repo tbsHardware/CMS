@@ -25,10 +25,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $app->getUrlManager()->addRules([
             $this->id => $this->id,
             $this->id . '/<controller:[\w\-]+>/<action:[\w\-]+>' => $this->id . '/<controller>/<action>',
-            '<parent:[' . $aliases . ']>' => $this->id . '/post/index',
-            '<parent:[' . $aliases . ']>/<id:\d+>' => $this->id . '/post/index',
-            '<parent:[' . $aliases . ']>/<page:[\w\-]+>' => $this->id . '/post/index',
-            '<parent:[' . $aliases . ']>/<page:[\w\-]+>/<id:\d+>' => $this->id . '/post/index',
+            '<parent:(' . $aliases . ')>' => $this->id . '/post/index',
+            '<parent:(' . $aliases . ')>/<id:\d+>' => $this->id . '/post/index',
+            '<parent:(' . $aliases . ')>/<child:[\w\-]+>' => $this->id . '/post/index',
+            '<parent:(' . $aliases . ')>/<child:[\w\-]+>/<id:\d+>' => $this->id . '/post/index',
         ], false);
     }
 }

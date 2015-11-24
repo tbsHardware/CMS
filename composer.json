@@ -1,20 +1,14 @@
 {
-    "name": "tbsHardware/CMS",
-    "description": "Studio WB Project#1",
-    "keywords": [],
-    "homepage": "http://www.studio-wb.ru/",
-    "type": "project",
-    "license": "BSD-3-Clause",
-    "support": {
-        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/yii2"
-    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/tbsHardware/CMS"
+        }
+    ],
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
+        "tbsHardware/CMS": "master",
         "yiisoft/yii2": ">=2.0.5",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*"
