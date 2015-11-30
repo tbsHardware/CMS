@@ -8,17 +8,22 @@ use yii\base\BootstrapInterface;
 
 class Module extends BaseModule implements BootstrapInterface
 {
-    public $postUrl = 'posts/post/index';
+    public $rules = [
+        '<parent:({aliases})>'                          => 'posts/post/index',
+        '<parent:({aliases})>/<id:\d+>'                 => 'posts/post/index',
+        '<parent:({aliases})>/<child:[\w\-]+>'          => 'posts/post/index',
+        '<parent:({aliases})>/<child:[\w\-]+>/<id:\d+>' => 'posts/post/index',
+    ];
 
     public function bootstrap($app)
     {
         $aliases = implode('|', $this->getAliasesOfMainPages());
 
          $app->getUrlManager()->addRules([
-             '<parent:(' . $aliases . ')>'                          => $this->postUrl,
-             '<parent:(' . $aliases . ')>/<id:\d+>'                 => $this->postUrl,
-             '<parent:(' . $aliases . ')>/<child:[\w\-]+>'          => $this->postUrl,
-             '<parent:(' . $aliases . ')>/<child:[\w\-]+>/<id:\d+>' => $this->postUrl,
+             '<parent:(' . $aliases . ')>'                          => 'posts/post/index',
+             '<parent:(' . $aliases . ')>/<id:\d+>'                 => 'posts/post/index',
+             '<parent:(' . $aliases . ')>/<child:[\w\-]+>'          => 'posts/post/index',
+             '<parent:(' . $aliases . ')>/<child:[\w\-]+>/<id:\d+>' => 'posts/post/index',
          ], false);
     }
 

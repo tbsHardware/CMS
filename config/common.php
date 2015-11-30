@@ -9,8 +9,8 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'posts', 'users'],
     'modules' => [
-        'post'  => 'app\modules\posts\Module',
-        'users' => 'app\modules\users\Module',
+        'posts'  => 'app\modules\posts\Module',
+        'users'  => 'app\modules\users\Module',
     ],
     'components' => [
         'db' => [

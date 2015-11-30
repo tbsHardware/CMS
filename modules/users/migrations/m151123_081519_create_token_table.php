@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m151113_093354_create_user_token_table extends Migration
+class m151123_081519_create_token_table extends Migration
 {
     public function up()
     {
@@ -14,7 +14,7 @@ class m151113_093354_create_user_token_table extends Migration
         ]);
 
         $this->createIndex('token_unique', '{{%users_token}}', ['user_id', 'token', 'type'], true);
-        $this->addForeignKey('fk_users_token', '{{%users_token}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+        $this->addForeignKey('fk_users_token', '{{%users_token}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'RESTRICT');
     }
 
     public function down()
