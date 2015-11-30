@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\post\controllers;
+namespace app\modules\posts\controllers;
 
 use Yii;
 use yii\web\Controller;

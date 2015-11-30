@@ -7,7 +7,11 @@ $params = yii\helpers\ArrayHelper::merge(
 
 return [
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'posts', 'users'],
+    'modules' => [
+        'post'  => 'app\modules\posts\Module',
+        'users' => 'app\modules\users\Module',
+    ],
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
@@ -21,10 +25,6 @@ return [
                     'levels' => ['error', 'warning'],
                 ],
             ],
-        ],
-        'user' => [ // Переделать
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,

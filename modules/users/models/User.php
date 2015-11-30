@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\models;
+namespace app\modules\users\models;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return '{{%user}}';
+        return '{{%users_user}}';
     }
 
     /**

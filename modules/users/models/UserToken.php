@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\models;
+namespace app\modules\users\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -22,7 +22,7 @@ class UserToken extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%user_token}}';
+        return '{{%users_token}}';
     }
 
     /**

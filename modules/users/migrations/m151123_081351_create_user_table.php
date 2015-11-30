@@ -1,13 +1,12 @@
 <?php
 
-use yii\db\Schema;
 use yii\db\Migration;
 
 class m151113_074308_create_user_table extends Migration
 {
     public function up()
     {
-        $this->createTable('{{%user_user}}', [
+        $this->createTable('{{%users_user}}', [
             'id'                => $this->primaryKey(),
             'username'          => $this->string()->notNull()->unique(),
             'email'             => $this->string()->notNull()->unique(),
@@ -24,6 +23,6 @@ class m151113_074308_create_user_table extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%user_user}}');
+        $this->dropTable('{{%users_user}}');
     }
 }

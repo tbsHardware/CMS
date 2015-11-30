@@ -11,11 +11,6 @@ $config = [
             'errorAction' => 'site/error',
         ],
     ],
-    'bootstrap' => ['post', 'user'],
-    'modules' => [
-        'post' => 'app\modules\post\Module',
-        'user' => 'app\modules\user\Module',
-    ],
 ];
 
 if (YII_ENV_DEV) {
