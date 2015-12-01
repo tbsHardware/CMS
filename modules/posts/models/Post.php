@@ -3,6 +3,8 @@
 namespace app\modules\posts\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use app\modules\posts\models\query\PostQuery;
 
 /**
  * This is the model class for table "posts_post".
@@ -20,8 +22,15 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class Post extends \yii\db\ActiveRecord
+class Post extends ActiveRecord
 {
+    const TYPE_PAGE = 'page';
+    const TYPE_POST = 'post';
+
+    const STATUS_DRAFT     = 'draft';
+    const STATUS_PUBLISHED = 'published';
+    const STATUS_USER_ONLY = 'user_only';
+
     /**
      * @inheritdoc
      */
@@ -63,6 +72,11 @@ class Post extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public static function find()
+    {
+        return new PostQuery(get_called_class());
     }
 
     /**

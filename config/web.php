@@ -2,6 +2,11 @@
 
 $config = [
     'id' => 'app',
+    'bootstrap' => ['posts', 'users'],
+    'modules' => [
+        'posts'  => 'app\modules\posts\Module',
+        'users'  => 'app\modules\users\Module',
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

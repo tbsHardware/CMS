@@ -7,11 +7,7 @@ $params = yii\helpers\ArrayHelper::merge(
 
 return [
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'posts', 'users'],
-    'modules' => [
-        'posts'  => 'app\modules\posts\Module',
-        'users'  => 'app\modules\users\Module',
-    ],
+    'bootstrap' => ['log'],
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',

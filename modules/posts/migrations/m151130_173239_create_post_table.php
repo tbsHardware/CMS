@@ -8,11 +8,11 @@ class m151130_173239_create_post_table extends Migration
     {
         $this->createTable('{{%posts_post}}', [
             'id'               => $this->primaryKey(),
-            'post_alias'       => $this->string(120),
-            'post_title'       => $this->text(),
+            'post_alias'       => $this->string(120)->notNull(),
+            'post_title'       => $this->text()->notNull(),
             'post_description' => $this->text(),
             'post_content'     => 'longtext',
-            'post_status'      => $this->string(20)->defaultValue('publish'),
+            'post_status'      => $this->string(20)->defaultValue('published'),
             'post_type'        => $this->string(20)->defaultValue('post'),
             'post_parent'      => $this->integer(),
             'user_author'      => $this->integer()->notNull(),
