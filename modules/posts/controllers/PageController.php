@@ -2,13 +2,25 @@
 
 namespace app\modules\posts\controllers;
 
+use app\modules\posts\models\Page;
 use Yii;
 use yii\web\Controller;
+use yii\web\HttpException;
 
 class PageController extends Controller
 {
-    public function actionIndex($page)
+    public function actionIndex($page, $parent = null)
     {
-        var_dump($page);
+        $path = $parent ? ($parent . '/' . $page) : $page;
+        $path = preg_replace('#/$#', '', $path);
+
+        $page = Page::find()->byPath($path)->one();
+        if (!$page) {
+            throw new HttpException(404, 'Страница не найдена');
+        }
+
+        return $this->render($page->page_template, [
+            'page' => $page,
+        ]);
     }
 }

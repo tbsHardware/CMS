@@ -125,6 +125,15 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getAttribute('id');
     }
 
+    /**
+     * @return bool Whether the user is an admin or not.
+     */
+    public function getIsAdmin()
+    {
+        //return in_array($this->username, $this->module->admins);
+        return true;
+    }
+
     /** @inheritdoc */
     public function getAuthKey()
     {

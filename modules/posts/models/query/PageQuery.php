@@ -2,13 +2,18 @@
 
 namespace app\modules\posts\models\query;
 
-use Yii;
 use app\components\ActiveQuery;
+use Yii;
 
 class PageQuery extends ActiveQuery
 {
-    public function byParent()
+    public function parent()
     {
-        return $this->andWhere(['page_parent' => NULL]);
+        return $this->andWhere(['page_parent' => null]);
+    }
+
+    public function byPath($path)
+    {
+        return $this->andWhere(['page_path' => $path]);
     }
 }

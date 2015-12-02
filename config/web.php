@@ -15,6 +15,17 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'view' => [
+            'theme' => [
+                'basePath' => '@app/themes/default',
+                'baseUrl' => '@web/themes/default',
+                'pathMap' => [
+                    '@app/views' => '@app/themes/default',
+                    '@app/modules' => '@app/themes/default/modules',
+                    '@app/widgets' => '@app/themes/default/widgets',
+                ],
+            ],
+        ],
     ],
 ];
 

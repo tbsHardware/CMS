@@ -8,7 +8,7 @@ use app\modules\posts\models\Post;
 
 class PostQuery extends ActiveQuery
 {
-    public function byPublished()
+    public function published()
     {
         return $this->andWhere(['post_status' => Post::STATUS_PUBLISHED]);
     }

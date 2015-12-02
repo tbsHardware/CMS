@@ -2,9 +2,9 @@
 
 namespace app\modules\posts\models;
 
+use app\modules\posts\models\query\PageQuery;
 use Yii;
 use yii\db\ActiveRecord;
-use app\modules\posts\models\query\PageQuery;
 
 /**
  * This is the model class for table "posts_page".

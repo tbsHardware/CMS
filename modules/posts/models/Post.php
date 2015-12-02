@@ -2,9 +2,9 @@
 
 namespace app\modules\posts\models;
 
+use app\modules\posts\models\query\PostQuery;
 use Yii;
 use yii\db\ActiveRecord;
-use app\modules\posts\models\query\PostQuery;
 
 /**
  * This is the model class for table "posts_post".
@@ -27,9 +27,10 @@ use app\modules\posts\models\query\PostQuery;
  */
 class Post extends ActiveRecord
 {
-    const STATUS_DRAFT     = 'draft';
+    const STATUS_DRAFT = 'draft';
     const STATUS_PUBLISHED = 'published';
     const STATUS_USER_ONLY = 'user_only';
+
     /**
      * @inheritdoc
      */

@@ -34,7 +34,8 @@ class Token extends ActiveRecord
             [['user_id', 'token', 'created_at', 'type'], 'required'],
             [['user_id', 'created_at', 'type'], 'integer'],
             [['token'], 'string', 'max' => 32],
-            [['user_id', 'token', 'type'], 'unique', 'targetAttribute' => ['user_id', 'token', 'type'], 'message' => 'The combination of User ID, Token and Type has already been taken.']
+            [['user_id', 'token', 'type'], 'unique', 'targetAttribute' => ['user_id', 'token', 'type'],
+                'message' => 'The combination of User ID, Token and Type has already been taken.']
         ];
     }
 
