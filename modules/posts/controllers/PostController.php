@@ -7,8 +7,8 @@ use yii\web\Controller;
 
 class PostController extends Controller
 {
-    public function actionIndex($parent, $child = null, $id = null)
+    public function actionIndex($id)
     {
-        var_dump([$parent, $child, $id]);
+        var_dump($id);
     }
 }

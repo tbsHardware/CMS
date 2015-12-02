@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "users_user".
  *
  * @property integer $id
  * @property string $username
@@ -23,7 +23,7 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property UserToken[] $userTokens
+ * @property Token[] $tokens
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return '{{%users_user}}';
+        return 'users_user';
     }
 
     /**
@@ -47,6 +47,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['password_hash'], 'string', 'max' => 60],
             [['auth_key'], 'string', 'max' => 32],
             [['registration_ip'], 'string', 'max' => 45],
+            [['username'], 'unique'],
+            [['email'], 'unique'],
             [['username'], 'unique'],
             [['email'], 'unique']
         ];
@@ -73,7 +75,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getUserTokens()
     {
-        return $this->hasMany(UserToken::className(), ['user_id' => 'id']);
+        return $this->hasMany(Token::className(), ['user_id' => 'id']);
     }
 
     public function createUser($confirm = null)
@@ -155,5 +157,13 @@ class User extends ActiveRecord implements IdentityInterface
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersTokens()
+    {
+        return $this->hasMany(Token::className(), ['user_id' => 'id']);
     }
 }

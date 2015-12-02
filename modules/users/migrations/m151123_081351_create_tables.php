@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m151123_081351_create_user_table extends Migration
+class m151123_081351_create_tables extends Migration
 {
     public function up()
     {
@@ -19,10 +19,24 @@ class m151123_081351_create_user_table extends Migration
             'created_at'        => $this->integer()->notNull(),
             'updated_at'        => $this->integer()->notNull(),
         ]);
+
+        $this->createIndex('user_unique_username', '{{%users_user}}', 'username', true);
+        $this->createIndex('user_unique_email', '{{%users_user}}', 'email', true);
+
+        $this->createTable('{{%users_token}}', [
+            'user_id' => $this->integer()->notNull(),
+            'token' => $this->string(32)->notNull(),
+            'created_at' => $this->integer()->notNull(),
+            'type' => $this->smallInteger()->notNull(),
+        ]);
+
+        $this->createIndex('token_unique', '{{%users_token}}', ['user_id', 'token', 'type'], true);
+        $this->addForeignKey('fk_users_token', '{{%users_token}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'RESTRICT');
     }
 
     public function down()
     {
         $this->dropTable('{{%users_user}}');
+        $this->dropTable('{{%users_token}}');
     }
 }

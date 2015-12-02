@@ -5,28 +5,28 @@ namespace app\modules\posts;
 use Yii;
 use yii\base\Module as BaseModule;
 use yii\base\BootstrapInterface;
-use app\modules\posts\models\Post;
+use app\modules\posts\models\Page;
 
 class Module extends BaseModule implements BootstrapInterface
 {
     public $rules = [
-        '<parent:({aliases})>'                          => 'posts/post/index',
-        '<parent:({aliases})>/<id:\d+>'                 => 'posts/post/index',
-        '<parent:({aliases})>/<child:[\w\-]+>'          => 'posts/post/index',
-        '<parent:({aliases})>/<child:[\w\-]+>/<id:\d+>' => 'posts/post/index',
+        '<parent:({paths})>/<postId:[\d]+>/<postAlias:[\w_-]>' => 'posts/post/index',
+        '<parent:({paths})>/<page:[\w_\/-]+>/<id:[\d]+>/<postAlias:[\w_-]>' => 'posts/post/index',
+        '<parent:({paths})>/<page:[\w_\/-]+>' => 'posts/page/index',
+        '<page:({paths})>' => 'posts/page/index',
     ];
 
     public function bootstrap($app)
     {
         if ($this->rules)
         {
-            $aliases = implode('|', $this->getAliasesOfMainPages());
-            if ($aliases)
+            if ($paths=$this->getPathsOfMainPages())
             {
                 $rules = [];
+                $paths = implode('|', $paths);
                 foreach ($this->rules as $key => $value)
                 {
-                    $key = str_replace('{aliases}', $aliases, $key);
+                    $key = str_replace('{paths}', $paths, $key);
                     $rules[$key] = $value;
                 }
                 $app->getUrlManager()->addRules($rules, false);
@@ -34,16 +34,19 @@ class Module extends BaseModule implements BootstrapInterface
         }
     }
 
-    public function getAliasesOfMainPages()
+    public function getPathsOfMainPages()
     {
-        $aliases = [];
-        $posts = Post::find()->byPublished()->byPage()->byParent()->select('post_alias')->all();
-        if ($posts)
+        $paths = [];
+        if(Yii::$app->db->schema->getTableSchema(Page::tableName()))
         {
-            foreach ($posts as $post)
-                $aliases[] = $post->post_alias;
+            $pages = Page::find()->byParent()->select('page_path')->all();
+            if ($pages)
+            {
+                foreach ($pages as $page)
+                    $paths[] = $page->page_path;
+            }
         }
-        return $aliases;
+        return $paths;
     }
 
 }

@@ -10,27 +10,26 @@ use app\modules\posts\models\query\PostQuery;
  * This is the model class for table "posts_post".
  *
  * @property integer $id
- * @property string $post_alias
+ * @property string $post_path
  * @property string $post_title
  * @property string $post_description
  * @property string $post_content
- * @property string $post_status
- * @property string $post_type
- * @property integer $post_parent
- * @property integer $user_author
  * @property integer $post_date
+ * @property string $post_status
+ * @property string $comment_status
+ * @property integer $page_id
+ * @property integer $user_author
  * @property integer $created_at
  * @property integer $updated_at
+ *
+ * @property Page $page
+ * @property $author
  */
 class Post extends ActiveRecord
 {
-    const TYPE_PAGE = 'page';
-    const TYPE_POST = 'post';
-
     const STATUS_DRAFT     = 'draft';
     const STATUS_PUBLISHED = 'published';
     const STATUS_USER_ONLY = 'user_only';
-
     /**
      * @inheritdoc
      */
@@ -45,11 +44,11 @@ class Post extends ActiveRecord
     public function rules()
     {
         return [
+            [['post_path', 'post_title', 'post_date', 'user_author', 'created_at', 'updated_at'], 'required'],
             [['post_title', 'post_description', 'post_content'], 'string'],
-            [['post_parent', 'user_author', 'post_date', 'created_at', 'updated_at'], 'integer'],
-            [['user_author', 'post_date', 'created_at', 'updated_at'], 'required'],
-            [['post_alias'], 'string', 'max' => 120],
-            [['post_status', 'post_type'], 'string', 'max' => 20]
+            [['post_date', 'page_id', 'user_author', 'created_at', 'updated_at'], 'integer'],
+            [['post_path'], 'string', 'max' => 120],
+            [['post_status', 'comment_status'], 'string', 'max' => 20]
         ];
     }
 
@@ -60,30 +59,38 @@ class Post extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'post_alias' => 'Post Alias',
+            'post_path' => 'Post Path',
             'post_title' => 'Post Title',
             'post_description' => 'Post Description',
             'post_content' => 'Post Content',
-            'post_status' => 'Post Status',
-            'post_type' => 'Post Type',
-            'post_parent' => 'Post Parent',
-            'user_author' => 'User Author',
             'post_date' => 'Post Date',
+            'post_status' => 'Post Status',
+            'comment_status' => 'Comment Status',
+            'page_id' => 'Page ID',
+            'user_author' => 'User Author',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-    public static function find()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPage()
     {
-        return new PostQuery(get_called_class());
+        return $this->hasOne(Page::className(), ['id' => 'page_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserAuthor()
+    public function getAuthor()
     {
         return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'user_author']);
+    }
+
+    public static function find()
+    {
+        return new PostQuery(get_called_class());
     }
 }

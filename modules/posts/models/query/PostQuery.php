@@ -12,19 +12,4 @@ class PostQuery extends ActiveQuery
     {
         return $this->andWhere(['post_status' => Post::STATUS_PUBLISHED]);
     }
-
-    public function byPage()
-    {
-        return $this->andWhere(['post_type' => Post::TYPE_PAGE]);
-    }
-
-    public function byPost()
-    {
-        return $this->andWhere(['post_type' => Post::TYPE_POST]);
-    }
-
-    public function byParent()
-    {
-        return $this->andWhere(['post_parent' => NULL]);
-    }
 }
