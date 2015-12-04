@@ -18,7 +18,9 @@ class Module extends BaseModule implements BootstrapInterface
 
     public function bootstrap($app)
     {
-        if ($this->rules) {
+        if ($app instanceof \yii\console\Application) {
+            $this->controllerNamespace = 'app\modules\posts\commands\ConsoleController';
+        } elseif ($this->rules) {
             if ($paths = $this->getPathsOfMainPages()) {
                 $rules = [];
                 $paths = implode('|', $paths);

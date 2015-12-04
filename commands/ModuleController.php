@@ -11,7 +11,7 @@ class ModuleController extends Controller
 
     public function actionIndex($module, $action = 'index')
     {
-        if (!file_exists(Yii::$app->basePath . 'modules/' . $module . '/commands/ConsoleController')) {
+        if (!file_exists(Yii::$app->basePath . '/modules/' . $module . '/commands/ConsoleController.php')) {
             $this->stdout("Module or ConsoleController does not exist\n", Console::FG_RED);
             return Controller::EXIT_CODE_ERROR;
         }

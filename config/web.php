@@ -15,7 +15,11 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'view' => [
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
+        /*'view' => [
             'theme' => [
                 'basePath' => '@app/themes/default',
                 'baseUrl' => '@web/themes/default',
@@ -25,7 +29,7 @@ $config = [
                     '@app/widgets' => '@app/themes/default/widgets',
                 ],
             ],
-        ],
+        ],*/
     ],
 ];
 
