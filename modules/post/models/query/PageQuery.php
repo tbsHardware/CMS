@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\posts\models\query;
+namespace app\modules\post\models\query;
 
 use app\components\ActiveQuery;
 use Yii;

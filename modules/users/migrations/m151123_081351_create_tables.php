@@ -31,13 +31,38 @@ class m151123_081351_create_tables extends Migration
         ]);
 
         $this->createIndex('token_unique', '{{%users_token}}', ['user_id', 'token', 'type'], true);
-        $this->addForeignKey('fk_users_token', '{{%users_token}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE',
-            'RESTRICT');
+        $this->addForeignKey('fk_users_token', '{{%users_token}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'CASCADE');
+
+        $this->createTable('{{%users_field}}', [
+            'id' => $this->primaryKey(),
+            'alias' => $this->string(32)->notNull(),
+            'title' => $this->string(255)->notNull(),
+            'field_type' => $this->string(32)->notNull()->defaultValue('string'),
+            'field_size_min' => $this->integer(),
+            'field_size_max' => $this->integer(),
+            'required' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'default' => $this->string(255),
+            'range' => $this->string(255),
+            'other_validator' => $this->string(255),
+        ]);
+
+        $this->createTable('{{%users_profile}}', [
+            'user_id' => $this->integer()->notNull(),
+            'field_id' => $this->integer()->notNull(),
+            'value' => $this->text()->notNull(),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
+        ]);
+
+        $this->addForeignKey('fk1_users_profile', '{{%users_profile}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk2_users_profile', '{{%users_profile}}', 'field_id', '{{%users_field}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()
     {
         $this->dropTable('{{%users_user}}');
         $this->dropTable('{{%users_token}}');
+        $this->dropTable('{{%users_field}}');
+        $this->dropTable('{{%users_profile}}');
     }
 }

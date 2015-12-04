@@ -8,6 +8,8 @@ use yii\base\Module as BaseModule;
 
 class Module extends BaseModule implements BootstrapInterface
 {
+    public $controllerNamespace = 'app\modules\users\controllers';
+
     public function bootstrap($app)
     {
         if ($app instanceof \yii\console\Application) {
@@ -19,6 +21,5 @@ class Module extends BaseModule implements BootstrapInterface
                 'identityClass' => 'app\modules\users\models\User',
             ]);
         }
-
     }
 }

@@ -6,7 +6,7 @@ class m151130_173239_create_tables extends Migration
 {
     public function up()
     {
-        $this->createTable('{{%posts_page}}', [
+        $this->createTable('{{%post_page}}', [
             'id' => $this->primaryKey(),
             'page_path' => $this->string(120)->notNull(),
             'page_title' => $this->text()->notNull(),
@@ -17,9 +17,9 @@ class m151130_173239_create_tables extends Migration
             'updated_at' => $this->integer()->notNull(),
         ]);
 
-        $this->createIndex('index_posts_post', '{{%posts_page}}', 'page_path');
+        $this->createIndex('index_post_post', '{{%post_page}}', 'page_path');
 
-        $this->createTable('{{%posts_post}}', [
+        $this->createTable('{{%post_post}}', [
             'id' => $this->primaryKey(),
             'post_path' => $this->string(120)->notNull(),
             'post_title' => $this->text()->notNull(),
@@ -34,15 +34,15 @@ class m151130_173239_create_tables extends Migration
             'updated_at' => $this->integer()->notNull(),
         ]);
 
-        $this->createIndex('index_posts_post', '{{%posts_post}}', 'user_author');
-        $this->addForeignKey('fk_posts_post', '{{%posts_post}}', 'page_id', '{{%posts_page}}', 'id', 'CASCADE',
+        $this->createIndex('index_post_post', '{{%post_post}}', 'user_author');
+        $this->addForeignKey('fk_post_post', '{{%post_post}}', 'page_id', '{{%post_page}}', 'id', 'CASCADE',
             'RESTRICT');
 
     }
 
     public function down()
     {
-        $this->dropTable('{{%posts_page}}');
-        $this->dropTable('{{%posts_post}}');
+        $this->dropTable('{{%post_page}}');
+        $this->dropTable('{{%post_post}}');
     }
 }

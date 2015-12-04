@@ -1,8 +1,8 @@
 <?php
 
-namespace app\modules\posts\controllers;
+namespace app\modules\post\controllers;
 
-use app\modules\posts\models\Post;
+use app\modules\post\models\Post;
 use Yii;
 use yii\web\Controller;
 use yii\web\HttpException;

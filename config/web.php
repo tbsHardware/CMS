@@ -2,10 +2,11 @@
 
 $config = [
     'id' => 'app',
-    'bootstrap' => ['posts', 'users'],
+    'bootstrap' => ['post', 'users'],
     'modules' => [
-        'posts'  => 'app\modules\posts\Module',
+        'post'  => 'app\modules\post\Module',
         'users'  => 'app\modules\users\Module',
+        'admin'  => 'app\modules\admin\Module',
     ],
     'components' => [
         'request' => [

@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\posts\models;
+namespace app\modules\post\models;
 
-use app\modules\posts\models\query\PageQuery;
+use app\modules\post\models\query\PageQuery;
 use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "posts_page".
+ * This is the model class for table "post_page".
  *
  * @property integer $id
  * @property string $page_path
@@ -27,7 +27,7 @@ class Page extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'posts_page';
+        return 'post_page';
     }
 
     /**
@@ -64,7 +64,7 @@ class Page extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPostsPosts()
+    public function getPosts()
     {
         return $this->hasMany(Post::className(), ['page_id' => 'id']);
     }

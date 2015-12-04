@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\posts\models;
+namespace app\modules\post\models;
 
-use app\modules\posts\models\query\PostQuery;
+use app\modules\post\models\query\PostQuery;
 use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "posts_post".
+ * This is the model class for table "post_post".
  *
  * @property integer $id
  * @property string $post_path
@@ -22,7 +22,7 @@ use yii\db\ActiveRecord;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Page $page
+ * @property Page[] $page
  * @property $author
  */
 class Post extends ActiveRecord
@@ -36,7 +36,7 @@ class Post extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'posts_post';
+        return 'post_post';
     }
 
     /**

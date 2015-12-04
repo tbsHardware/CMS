@@ -3,7 +3,7 @@
 return [
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=cms_test_tables',
+            'dsn' => 'mysql:host=localhost;dbname=cms',
             'username' => 'root',
             'password' => 'password',
         ],

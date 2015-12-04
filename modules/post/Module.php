@@ -1,25 +1,27 @@
 <?php
 
-namespace app\modules\posts;
+namespace app\modules\post;
 
-use app\modules\posts\models\Page;
+use app\modules\post\models\Page;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Module as BaseModule;
 
 class Module extends BaseModule implements BootstrapInterface
 {
+    public $controllerNamespace = 'app\modules\post\controllers';
+
     public $rules = [
-        '<parent:({paths})>/<postId:[\d]+>/<postAlias:[\w_-]>' => 'posts/post/index',
-        '<parent:({paths})>/<page:[\w_\/-]+>/<id:[\d]+>/<postAlias:[\w_-]>' => 'posts/post/index',
-        '<parent:({paths})>/<page:[\w_\/-]+>' => 'posts/page/index',
-        '<page:({paths})>' => 'posts/page/index',
+        '<parent:({paths})>/<postId:[\d]+>/<postAlias:[\w_-]>' => 'post/post/index',
+        '<parent:({paths})>/<page:[\w_\/-]+>/<id:[\d]+>/<postAlias:[\w_-]>' => 'post/post/index',
+        '<parent:({paths})>/<page:[\w_\/-]+>' => 'post/page/index',
+        '<page:({paths})>' => 'post/page/index',
     ];
 
     public function bootstrap($app)
     {
         if ($app instanceof \yii\console\Application) {
-            $this->controllerNamespace = 'app\modules\posts\commands\ConsoleController';
+            $this->controllerNamespace = 'app\modules\post\commands\ConsoleController';
         } elseif ($this->rules) {
             if ($paths = $this->getPathsOfMainPages()) {
                 $rules = [];

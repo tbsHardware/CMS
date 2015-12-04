@@ -1,12 +1,12 @@
 <?php
 
-namespace app\modules\users\commands;
+namespace app\modules\post\commands;
 
 use Yii;
 
 class ConsoleController extends \app\components\ConsoleController
 {
-    const MIGRATION_PATH = '@app/modules/users/migrations';
+    const MIGRATION_PATH = '@app/modules/post/migrations';
 
     public function actionInstall()
     {

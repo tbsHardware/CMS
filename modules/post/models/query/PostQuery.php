@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\posts\models\query;
+namespace app\modules\post\models\query;
 
 use Yii;
 use app\components\ActiveQuery;
-use app\modules\posts\models\Post;
+use app\modules\post\models\Post;
 
 class PostQuery extends ActiveQuery
 {
