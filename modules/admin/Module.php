@@ -10,9 +10,13 @@ class Module extends BaseModule
 {
     public $defaultRoute = 'dashboard/index';
 
+    public $layout = 'admin';
+
     public $controllerNamespace = 'app\modules\admin\controllers';
 
     public $unmanagedModules = ['gii', 'debug', 'admin'];
+
+    public $pathMap = [];
 
     private $_managedModules;
 
@@ -20,14 +24,12 @@ class Module extends BaseModule
     {
         parent::init();
 
-        Yii::$app->view->theme = new Theme([
-            'pathMap' => ['@app/views' => '@app/themes/admin/views'],
-            'baseUrl' => '@app/themes/admin',
-        ]);
-
         foreach ($this->getManagedModules() as $id => $module) {
             $this->controllerMap[$id] = ['class' => $module->controllerNamespace . '\AdminController'];
+            $this->pathMap['@app/modules/admin/views/' . $id] = '@app/modules/' . $id . '/views/admin';
         }
+
+        Yii::$app->view->theme = new Theme(['pathMap' => $this->pathMap]);
     }
 
     public function getManagedModules()
