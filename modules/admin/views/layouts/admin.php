@@ -3,6 +3,9 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use yii\widgets\Breadcrumbs;
 use app\modules\admin\assets\AppAsset;
 
 AppAsset::register($this);
@@ -20,27 +23,34 @@ AppAsset::register($this);
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
 <?php $this->beginBody() ?>
 
-<div class="page-header navbar navbar-fixed-top">
-    <!-- BEGIN HEADER INNER -->
-    <div class="page-header-inner ">
-        <!-- BEGIN LOGO -->
-        <div class="page-logo">
-            <!--<a href="index.html">
-                <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" /> </a>-->
-            <div class="menu-toggler sidebar-toggler"> </div>
-        </div>
-        <!-- END LOGO -->
-        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="#" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
-        <!-- END RESPONSIVE MENU TOGGLER -->
-        <!-- BEGIN TOP NAVIGATION MENU -->
-        <div class="top-menu">
 
-        </div>
-        <!-- END TOP NAVIGATION MENU -->
-    </div>
-    <!-- END HEADER INNER -->
-</div>
+
+<?php
+NavBar::begin([
+    'brandLabel' => 'My Company',
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => ['class' => 'page-header navbar navbar-fixed-top'],
+    'innerContainerOptions' => ['class' => 'page-header-inner'],
+    'containerOptions' => ['class' => 'top-menu'],
+]);
+echo Nav::widget([
+    'options' => ['class' => 'nav navbar-nav pull-right'],
+    'items' => [
+        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'About', 'url' => ['/site/about']],
+        ['label' => 'Contact', 'url' => ['/site/contact']],
+        Yii::$app->user->isGuest ?
+            ['label' => 'Login', 'url' => ['/site/login']] :
+            [
+                'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                'url' => ['/site/logout'],
+                'linkOptions' => ['data-method' => 'post']
+            ],
+    ],
+]);
+NavBar::end();
+?>
+
 <!-- END HEADER -->
 <!-- BEGIN HEADER & CONTENT DIVIDER -->
 <div class="clearfix"> </div>
