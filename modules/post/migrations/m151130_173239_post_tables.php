@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m151130_173239_create_tables extends Migration
+class m151130_173239_post_tables extends Migration
 {
     public function up()
     {
@@ -42,7 +42,7 @@ class m151130_173239_create_tables extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%post_page}}');
         $this->dropTable('{{%post_post}}');
+        $this->dropTable('{{%post_page}}');
     }
 }

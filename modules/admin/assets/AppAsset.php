@@ -10,17 +10,28 @@ class AppAsset extends AssetBundle
 
     public $css = [
         'css/layout.min.css',
+        'css/components.min.css',
+        'http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
+        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
     ];
     public $js = [
+        'js/app.min.js',
+        'js/bootstrap-hover-dropdown.min.js',
+        'js/jquery.slimscroll.min.js',
     ];
 
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        'yii\jui\JuiAsset',
         '\wfcreations\simplelineicons\AssetBundle'
     ];
 
     public $themeStyle = 'darkBlue';
+
+    public $publishOptions = [
+        'forceCopy' => YII_DEBUG,
+    ];
 
     private $_themesCss = [
         'default' => 'css/themes/default.min.css',

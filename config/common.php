@@ -1,4 +1,5 @@
 <?php
+$rootDir = dirname(__DIR__);
 
 $params = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/params.php'),
@@ -6,8 +7,11 @@ $params = yii\helpers\ArrayHelper::merge(
 );
 
 return [
-    'basePath' => dirname(__DIR__),
+    'basePath' => $rootDir,
     'bootstrap' => ['log'],
+    'aliases' => [
+        '@webroot' => $rootDir . '/web',
+    ],
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
@@ -21,6 +25,9 @@ return [
                     'levels' => ['error', 'warning'],
                 ],
             ],
+        ],
+        'user' => [
+            'class' => 'app\components\WebUser',
         ],
     ],
     'params' => $params,

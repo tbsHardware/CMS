@@ -2,6 +2,7 @@
 
 $config = [
     'id' => 'app',
+    'language' => 'ru-RU',
     'bootstrap' => ['post', 'users'],
     'modules' => [
         'post'  => 'app\modules\post\Module',

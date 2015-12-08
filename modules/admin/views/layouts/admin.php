@@ -3,12 +3,11 @@
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+use yii\helpers\Url;
 use app\modules\admin\assets\AppAsset;
+use wfcreations\simplelineicons\SLI;
 
-AppAsset::register($this);
+$bundle = AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -22,40 +21,57 @@ AppAsset::register($this);
 </head>
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
 <?php $this->beginBody() ?>
+<!-- BEGIN PAGE HEADER -->
+<div class="page-header navbar navbar-fixed-top">
+    <div class="page-header-inner">
+        <div class="page-logo">
+            <?= Html::a(Html::img($bundle->baseUrl . '/img/logo.png', ['class' => 'logo-default']), Url::to(['/admin'])); ?>
+            <div class="menu-toggler sidebar-toggler"></div>
+        </div>
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"></a>
+        <div class="top-menu">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-user">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <!-- Здесь должен быть автар -->
+                        <img alt="" class="img-circle" src="http://www.keenthemes.com/preview/metronic/theme/assets/layouts/layout/img/avatar3_small.jpg" />
+                        <span class="username username-hide-on-mobile">Администратор<!-- Здесь должен быть логин --></span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li><?= Html::a(SLI::icon('key') . 'Выход', Url::to(Yii::$app->user->logoutUrl)) ?></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- END PAGE HEADER -->
+<div class="clearfix"></div>
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar-wrapper">
+        <div class="page-sidebar navbar-collapse collapse">
+            <ul class="page-sidebar-menu page-header-fixed scroller" data-keep-expanded="false" data-auto-scroll="true"
+                data-slide-speed="200">
+                <li class="sidebar-toggler-wrapper hide">
+                    <div class="sidebar-toggler"></div>
+                </li>
 
+            </ul>
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
 
-
-<?php
-NavBar::begin([
-    'brandLabel' => 'My Company',
-    'brandUrl' => Yii::$app->homeUrl,
-    'options' => ['class' => 'page-header navbar navbar-fixed-top'],
-    'innerContainerOptions' => ['class' => 'page-header-inner'],
-    'containerOptions' => ['class' => 'top-menu'],
-]);
-echo Nav::widget([
-    'options' => ['class' => 'nav navbar-nav pull-right'],
-    'items' => [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-        Yii::$app->user->isGuest ?
-            ['label' => 'Login', 'url' => ['/site/login']] :
-            [
-                'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                'url' => ['/site/logout'],
-                'linkOptions' => ['data-method' => 'post']
-            ],
-    ],
-]);
-NavBar::end();
-?>
-
-<!-- END HEADER -->
-<!-- BEGIN HEADER & CONTENT DIVIDER -->
-<div class="clearfix"> </div>
-<!-- END HEADER & CONTENT DIVIDER -->
-
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END PAGE CONTAINER -->
 <?php $this->endBody() ?>
 </body>
 </html>

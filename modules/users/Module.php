@@ -15,9 +15,11 @@ class Module extends BaseModule implements BootstrapInterface
         if ($app instanceof \yii\console\Application) {
             $this->controllerNamespace = 'app\modules\users\commands\ConsoleController';
         } else {
-            Yii::$container->set('yii\web\User', [
+            Yii::$container->set('app\components\WebUser', [
                 'enableAutoLogin' => true,
                 'loginUrl' => ['/user/login'],
+                'logoutUrl' => ['/user/logout'],
+                'profileUrl' => ['/user/profile'],
                 'identityClass' => 'app\modules\users\models\User',
             ]);
         }

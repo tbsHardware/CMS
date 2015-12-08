@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m151123_081351_create_tables extends Migration
+class m151123_081351_users_tables extends Migration
 {
     public function up()
     {
@@ -37,6 +37,8 @@ class m151123_081351_create_tables extends Migration
             'id' => $this->primaryKey(),
             'alias' => $this->string(32)->notNull(),
             'title' => $this->string(255)->notNull(),
+            'visible' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'position' => $this->smallInteger(3)->notNull()->defaultValue(0),
             'field_type' => $this->string(32)->notNull()->defaultValue('string'),
             'field_size_min' => $this->integer(),
             'field_size_max' => $this->integer(),
