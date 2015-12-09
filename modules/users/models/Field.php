@@ -37,7 +37,7 @@ class Field extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'users_field';
+        return '{{%users_field}}';
     }
 
     /**

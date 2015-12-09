@@ -27,7 +27,7 @@ class Page extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'post_page';
+        return '{{%post_page}}';
     }
 
     /**

@@ -21,17 +21,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
-        /*'view' => [
-            'theme' => [
-                'basePath' => '@app/themes/default',
-                'baseUrl' => '@app/themes/default',
-                'pathMap' => [
-                    '@app/views' => '@app/themes/default',
-                    '@app/modules' => '@app/themes/default/modules',
-                    '@app/widgets' => '@app/themes/default/widgets',
-                ],
-            ],
-        ],*/
+        'user' => [
+            'class' => 'app\components\WebUser',
+            'enableConfirmation' => true,
+        ],
     ],
 ];
 

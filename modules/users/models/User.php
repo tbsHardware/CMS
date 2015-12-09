@@ -2,6 +2,7 @@
 
 namespace app\modules\users\models;
 
+use app\modules\users\helpers\Password;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -24,15 +25,47 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  *
  * @property Token[] $tokens
+ * @property Profile[] $profile
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    const BEFORE_CREATE = 'beforeCreate';
+    const AFTER_CREATE = 'afterCreate';
+    const BEFORE_REGISTER = 'beforeRegister';
+    const AFTER_REGISTER = 'afterRegister';
+    const BEFORE_LOGIN = 'beforeLogin';
+    const AFTER_LOGIN = 'afterLogin';
+    const BEFORE_LOGOUT = 'beforeLogout';
+    const AFTER_LOGOUT = 'afterLogout';
+
+    public $password;
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'users_user';
+        return '{{%users_user}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+    /** @inheritdoc */
+    public function scenarios()
+    {
+        return [
+            'register' => ['username', 'email', 'password'],
+            'create' => ['username', 'email', 'password'],
+            'connect' => ['username', 'email'],
+        ];
     }
 
     /**
@@ -41,7 +74,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email', 'password_hash', 'auth_key', 'registration_ip', 'created_at', 'updated_at'], 'required'],
+            [
+                ['username', 'email', 'password_hash', 'auth_key', 'registration_ip', 'created_at', 'updated_at'],
+                'required'
+            ],
             [['confirmed_at', 'blocked_at', 'created_at', 'updated_at'], 'integer'],
             [['username', 'email', 'unconfirmed_email'], 'string', 'max' => 255],
             [['password_hash'], 'string', 'max' => 60],
@@ -51,6 +87,89 @@ class User extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['username'], 'unique'],
             [['email'], 'unique']
+        ];
+    }
+
+    public function register()
+    {
+        $this->trigger(self::BEFORE_REGISTER);
+
+        $needConfirm = Yii::$app->getModule('users')->enableConfirmation;
+        if (!$this->add($needConfirm)) {
+            return false;
+        }
+
+        $this->trigger(self::AFTER_REGISTER);
+
+        return true;
+    }
+
+    public function create()
+    {
+        $this->trigger(self::BEFORE_CREATE);
+
+        if (!$this->add(false)) {
+            return false;
+        }
+
+        $this->trigger(self::AFTER_CREATE);
+
+        return true;
+    }
+
+    private function add($needConfirm)
+    {
+        if ($this->getIsNewRecord() == false) {
+            throw new \RuntimeException('Calling "' . __CLASS__ . '::' . __METHOD__ . '" on existing user');
+        }
+
+        $password = $this->password ? $this->password : Password::generate(8);
+        $this->password_hash = Password::hash($password);
+        $this->confirmed_at = $needConfirm ? null : time();
+
+        if (!$this->save()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Blocks the user by setting 'blocked_at' field to current time and regenerates auth_key.
+     */
+    public function block()
+    {
+        return (bool)$this->updateAttributes([
+            'blocked_at' => time(),
+            'auth_key' => Yii::$app->security->generateRandomString(),
+        ]);
+    }
+
+    /**
+     * UnBlocks the user by setting 'blocked_at' field to null.
+     */
+    public function unblock()
+    {
+        return (bool)$this->updateAttributes(['blocked_at' => null]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'email' => 'Email',
+            'password_hash' => 'Password Hash',
+            'auth_key' => 'Auth Key',
+            'unconfirmed_email' => 'Unconfirmed Email',
+            'registration_ip' => 'Registration Ip',
+            'confirmed_at' => 'Confirmed At',
+            'blocked_at' => 'Blocked At',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -70,43 +189,7 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getAttribute('blocked_at') != null;
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserTokens()
-    {
-        return $this->hasMany(Token::className(), ['user_id' => 'id']);
-    }
-
-    public function createUser($confirm = null)
-    {
-        if ($this->getIsNewRecord() == false) {
-            throw new \RuntimeException('Calling "' . __CLASS__ . '::' . __METHOD__ . '" on existing user');
-        }
-
-        if ($confirm === null)
-            $confirm = Yii::$app->params['enableConfirmation'];
-
-        $this->confirmed_at = $confirm ? null : time();
-
-        if (!$this->save()) {
-            return false;
-        }
-
-        return true;
-    }
-
     /* IdentityInterface */
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
     /** @inheritdoc */
     public static function findIdentity($id)
     {
@@ -149,30 +232,18 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * @return \yii\db\ActiveQuery
      */
-    public function attributeLabels()
+    public function getTokens()
     {
-        return [
-            'id' => 'ID',
-            'username' => 'Username',
-            'email' => 'Email',
-            'password_hash' => 'Password Hash',
-            'auth_key' => 'Auth Key',
-            'unconfirmed_email' => 'Unconfirmed Email',
-            'registration_ip' => 'Registration Ip',
-            'confirmed_at' => 'Confirmed At',
-            'blocked_at' => 'Blocked At',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
+        return $this->hasMany(Token::className(), ['user_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsersTokens()
+    public function getProfile()
     {
-        return $this->hasMany(Token::className(), ['user_id' => 'id']);
+        return $this->hasMany(Profile::className(), ['user_id' => 'id']);
     }
 }

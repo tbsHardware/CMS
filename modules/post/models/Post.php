@@ -36,7 +36,7 @@ class Post extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'post_post';
+        return '{{%post_post}}';
     }
 
     /**

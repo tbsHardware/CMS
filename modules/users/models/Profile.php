@@ -25,7 +25,7 @@ class Profile extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'users_profile';
+        return '{{%users_profile}}';
     }
 
     /**

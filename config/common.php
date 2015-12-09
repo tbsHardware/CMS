@@ -26,9 +26,6 @@ return [
                 ],
             ],
         ],
-        'user' => [
-            'class' => 'app\components\WebUser',
-        ],
     ],
     'params' => $params,
 ];

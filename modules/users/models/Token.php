@@ -17,26 +17,28 @@ use yii\db\ActiveRecord;
  */
 class Token extends ActiveRecord
 {
+    const TYPE_CONFIRMATION      = 0;
+    const TYPE_RECOVERY          = 1;
+    const TYPE_CONFIRM_NEW_EMAIL = 2;
+    const TYPE_CONFIRM_OLD_EMAIL = 3;
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'users_token';
+        return '{{%users_token}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
+    /** @inheritdoc */
+    public function beforeSave($insert)
     {
-        return [
-            [['user_id', 'token', 'created_at', 'type'], 'required'],
-            [['user_id', 'created_at', 'type'], 'integer'],
-            [['token'], 'string', 'max' => 32],
-            [['user_id', 'token', 'type'], 'unique', 'targetAttribute' => ['user_id', 'token', 'type'],
-                'message' => 'The combination of User ID, Token and Type has already been taken.']
-        ];
+        if ($insert) {
+            static::deleteAll(['user_id' => $this->user_id, 'type' => $this->type]);
+            $this->setAttribute('created_at', time());
+            $this->setAttribute('code', Yii::$app->security->generateRandomString());
+        }
+        return parent::beforeSave($insert);
     }
 
     /**

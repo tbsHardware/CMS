@@ -10,6 +10,8 @@ class Module extends BaseModule implements BootstrapInterface
 {
     public $controllerNamespace = 'app\modules\users\controllers';
 
+    public $enableConfirmation;
+
     public function bootstrap($app)
     {
         if ($app instanceof \yii\console\Application) {
