@@ -23,7 +23,7 @@ class LoginController extends Controller
             return $this->goBack();
         }
 
-        return $this->render('login', [
+        return $this->render('/login', [
             'model' => $model,
         ]);
     }

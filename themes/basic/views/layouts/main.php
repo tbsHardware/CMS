@@ -7,9 +7,11 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
+use app\themes\basic\assets\AppAsset;
 
 AppAsset::register($this);
+
+$user = Yii::$app->getUser();
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -39,10 +41,10 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ?
-                ['label' => 'Login', 'url' => ['/site/login']] :
+            $user->isGuest ?
+                ['label' => 'Login', 'url' => $user->loginUrl] :
                 [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                    'label' => 'Logout (' . $user->username . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ],

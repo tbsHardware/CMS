@@ -2,9 +2,7 @@
 
 namespace app\components;
 
-use yii\web\User;
-
-class WebUser extends User
+class WebUser extends \yii\web\User
 {
     public $logoutUrl;
     public $profileUrl;

@@ -2,9 +2,7 @@
 
 namespace app\components;
 
-use yii\db\ActiveQuery as YiiActiveQuery;
-
-class ActiveQuery extends YiiActiveQuery
+class ActiveQuery extends \yii\db\ActiveQuery
 {
 
     public function byId($id)

@@ -2,9 +2,9 @@
 
 namespace app\modules\users\models;
 
-use app\modules\users\models\query\FieldQuery;
 use Yii;
 use yii\db\ActiveRecord;
+use app\modules\users\models\query\FieldQuery;
 
 /**
  * This is the model class for table "users_field".

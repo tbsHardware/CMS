@@ -5,7 +5,7 @@ namespace app\modules\post;
 use app\modules\post\models\Page;
 use Yii;
 use yii\base\BootstrapInterface;
-use yii\base\Module as BaseModule;
+use app\components\BaseModule;
 
 class Module extends BaseModule implements BootstrapInterface
 {

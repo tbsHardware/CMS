@@ -2,12 +2,14 @@
 
 namespace app\modules\users\models;
 
-use app\modules\users\helpers\Password;
+
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use app\modules\users\helpers\Password;
+use app\modules\users\models\query\UserQuery;
 
 /**
  * This is the model class for table "users_user".
@@ -94,8 +96,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->trigger(self::BEFORE_REGISTER);
 
-        $needConfirm = Yii::$app->getModule('users')->enableConfirmation;
-        if (!$this->add($needConfirm)) {
+        $enableConfirmation = Yii::$app->getModule('users')->enableConfirmation;
+        if (!$this->add($enableConfirmation)) {
             return false;
         }
 
@@ -117,7 +119,7 @@ class User extends ActiveRecord implements IdentityInterface
         return true;
     }
 
-    private function add($needConfirm)
+    private function add($confirmationRequired)
     {
         if ($this->getIsNewRecord() == false) {
             throw new \RuntimeException('Calling "' . __CLASS__ . '::' . __METHOD__ . '" on existing user');
@@ -125,7 +127,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         $password = $this->password ? $this->password : Password::generate(8);
         $this->password_hash = Password::hash($password);
-        $this->confirmed_at = $needConfirm ? null : time();
+        $this->confirmed_at = $confirmationRequired ? null : time();
 
         if (!$this->save()) {
             return false;
@@ -245,5 +247,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProfile()
     {
         return $this->hasMany(Profile::className(), ['user_id' => 'id']);
+    }
+
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
     }
 }

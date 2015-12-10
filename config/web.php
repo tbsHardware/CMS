@@ -11,7 +11,6 @@ $config = [
     ],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'f32jfRF#HJzh43wfhw',
         ],
         'errorHandler' => [
@@ -23,7 +22,14 @@ $config = [
         ],
         'user' => [
             'class' => 'app\components\WebUser',
-            'enableConfirmation' => true,
+        ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en-US',
+                ],
+            ],
         ],
     ],
 ];

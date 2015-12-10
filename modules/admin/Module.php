@@ -3,7 +3,7 @@
 namespace app\modules\admin;
 
 use Yii;
-use yii\base\Module as BaseModule;
+use app\components\BaseModule;
 use yii\base\Theme;
 
 class Module extends BaseModule
