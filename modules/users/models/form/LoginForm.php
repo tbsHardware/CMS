@@ -1,9 +1,10 @@
 <?php
 
-namespace app\modules\users\models;
+namespace app\modules\users\models\form;
 
 use Yii;
 use yii\base\Model;
+use app\modules\users\models\User;
 use app\modules\users\helpers\Password;
 
 /**

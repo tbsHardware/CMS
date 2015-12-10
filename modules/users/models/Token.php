@@ -40,20 +40,6 @@ class Token extends ActiveRecord
         }
         return parent::beforeSave($insert);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'user_id' => 'User ID',
-            'token' => 'Token',
-            'created_at' => 'Created At',
-            'type' => 'Type',
-        ];
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */

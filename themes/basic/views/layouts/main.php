@@ -35,20 +35,24 @@ $user = Yii::$app->getUser();
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    $items = [
+        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'About', 'url' => ['/site/about']],
+        ['label' => 'Contact', 'url' => ['/site/contact']]
+    ];
+    if ($user->isGuest) {
+        $items[] = ['label' => 'Вход', 'url' => $user->loginUrl];
+        $items[] = ['label' => 'Регистрация', 'url' => $user->registrationUrl];
+    } else {
+        $items[] = [
+            'label' => 'Logout (' . $user->username . ')',
+            'url' => ['/site/logout'],
+            'linkOptions' => ['data-method' => 'post']
+        ];
+    }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            $user->isGuest ?
-                ['label' => 'Login', 'url' => $user->loginUrl] :
-                [
-                    'label' => 'Logout (' . $user->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ],
-        ],
+        'items' => $items,
     ]);
     NavBar::end();
     ?>

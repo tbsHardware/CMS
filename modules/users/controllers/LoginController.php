@@ -5,7 +5,7 @@ namespace app\modules\users\controllers;
 use Yii;
 use yii\web\Controller;
 use app\modules\users\models\User;
-use app\modules\users\models\LoginForm;
+use app\modules\users\models\form\LoginForm;
 
 class LoginController extends Controller
 {

@@ -6,4 +6,6 @@ class WebUser extends \yii\web\User
 {
     public $logoutUrl;
     public $profileUrl;
+    public $recoveryUrl;
+    public $registrationUrl;
 }

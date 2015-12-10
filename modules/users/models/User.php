@@ -3,13 +3,13 @@
 namespace app\modules\users\models;
 
 
+use app\modules\users\helpers\Password;
+use app\modules\users\models\query\UserQuery;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use app\modules\users\helpers\Password;
-use app\modules\users\models\query\UserQuery;
 
 /**
  * This is the model class for table "users_user".
@@ -40,7 +40,12 @@ class User extends ActiveRecord implements IdentityInterface
     const BEFORE_LOGOUT = 'beforeLogout';
     const AFTER_LOGOUT = 'afterLogout';
 
+    const SCENARIO_LOGIN = 'login';
+    const SCENARIO_REGISTER = 'register';
+
     public $password;
+
+    public static $usernameRegexp = '/^[-a-zA-Z0-9_\.@]+$/';
 
     /**
      * @inheritdoc
@@ -64,9 +69,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         return [
-            'register' => ['username', 'email', 'password'],
-            'create' => ['username', 'email', 'password'],
-            'connect' => ['username', 'email'],
+            self::SCENARIO_LOGIN => ['username', 'password'],
+            self::SCENARIO_REGISTER => ['username', 'email', 'password'],
         ];
     }
 
@@ -76,19 +80,34 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [
-                ['username', 'email', 'password_hash', 'auth_key', 'registration_ip', 'created_at', 'updated_at'],
-                'required'
+            // username rules
+            'usernameRequired' => ['username', 'required', 'on' => [self::SCENARIO_LOGIN, self::SCENARIO_REGISTER]],
+            'usernameMatch' => ['username', 'match', 'pattern' => static::$usernameRegexp],
+            'usernameLength' => ['username', 'string', 'min' => 4, 'max' => 16],
+            'usernameUnique' => [
+                'username',
+                'unique',
+                'message' => Yii::t('users', 'This username has already been taken')
             ],
-            [['confirmed_at', 'blocked_at', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'email', 'unconfirmed_email'], 'string', 'max' => 255],
-            [['password_hash'], 'string', 'max' => 60],
-            [['auth_key'], 'string', 'max' => 32],
-            [['registration_ip'], 'string', 'max' => 45],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
-            [['username'], 'unique'],
-            [['email'], 'unique']
+            'usernameTrim' => ['username', 'trim'],
+            // email rules
+            'emailRequired' => ['email', 'required', 'on' => [self::SCENARIO_REGISTER]],
+            'emailPattern' => ['email', 'email'],
+            'emailLength' => ['email', 'string', 'max' => 255],
+            'emailUnique' => [
+                'email',
+                'unique',
+                'message' => Yii::t('user', 'This email address has already been taken')
+            ],
+            'emailTrim' => ['email', 'trim'],
+            // password rules
+            'passwordRequired' => ['password', 'required', 'on' => [self::SCENARIO_LOGIN, self::SCENARIO_REGISTER]],
+            'passwordLength' => [
+                'password',
+                'string',
+                'min' => 6,
+                'on' => [self::SCENARIO_LOGIN, self::SCENARIO_REGISTER]
+            ],
         ];
     }
 
@@ -128,6 +147,11 @@ class User extends ActiveRecord implements IdentityInterface
         $password = $this->password ? $this->password : Password::generate(8);
         $this->password_hash = Password::hash($password);
         $this->confirmed_at = $confirmationRequired ? null : time();
+        $this->auth_key = Yii::$app->security->generateRandomString();
+
+        if (Yii::$app instanceof \yii\web\Application) {
+            $this->registration_ip = Yii::$app->request->userIP;
+        }
 
         if (!$this->save()) {
             return false;
