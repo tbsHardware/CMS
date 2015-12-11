@@ -14,6 +14,8 @@ class RegistrationForm extends Model
     public $passwordRepeat;
     public $captcha;
 
+    private $_user;
+
     /**
      * @inheritdoc
      */
@@ -69,19 +71,15 @@ class RegistrationForm extends Model
             return false;
         }
 
-        $user = new User(['scenario' => User::SCENARIO_REGISTER]);
-        $user->setAttributes($this->attributes);
+        $this->_user = new User(['scenario' => User::SCENARIO_REGISTER]);
+        $this->_user->setAttributes($this->attributes);
 
-        if (!$user->register()) {
-            return false;
-        }
+        return $this->_user->register();
+    }
 
-        Yii::$app->session->setFlash(
-            'info',
-            Yii::t('users', 'Your account has been created and a message with further instructions has been sent to your email')
-        );
-
-        return true;
+    public function getUser()
+    {
+        return $this->_user;
     }
 
     /**

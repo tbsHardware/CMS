@@ -4,12 +4,13 @@ namespace app\modules\users\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use app\modules\users\models\query\TokenQuery;
 
 /**
  * This is the model class for table "users_token".
  *
  * @property integer $user_id
- * @property string $token
+ * @property string $code
  * @property integer $created_at
  * @property integer $type
  *
@@ -30,6 +31,29 @@ class Token extends ActiveRecord
         return '{{%users_token}}';
     }
 
+    /**
+     * @return bool Whether token has expired.
+     */
+    public function getIsExpired()
+    {
+        $module = Yii::$app->getModule('users');
+
+        switch ($this->type) {
+            case self::TYPE_CONFIRMATION:
+            case self::TYPE_CONFIRM_NEW_EMAIL:
+            case self::TYPE_CONFIRM_OLD_EMAIL:
+                $expirationTime = $module->confirmWithin;
+                break;
+            case self::TYPE_RECOVERY:
+                $expirationTime = $module->recoverWithin;
+                break;
+            default:
+                throw new \RuntimeException();
+        }
+
+        return ($this->created_at + $expirationTime) < time();
+    }
+
     /** @inheritdoc */
     public function beforeSave($insert)
     {
@@ -40,11 +64,26 @@ class Token extends ActiveRecord
         }
         return parent::beforeSave($insert);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            // Тут надо бы отправить на email пользователю ссылку
+            // Сделать что то типо switch по type, использовать разные шаблоны для писем
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public static function find()
+    {
+        return new TokenQuery(get_called_class());
     }
 }

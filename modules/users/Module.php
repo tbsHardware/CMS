@@ -28,6 +28,10 @@ class Module extends BaseModule implements BootstrapInterface
 
     public $rememberMe = 1209600; // two weeks
 
+    public $confirmWithin = 86400; // 24 hours
+
+    public $recoverWithin = 21600; // 6 hours
+
     public function bootstrap($app)
     {
         if ($app instanceof \yii\console\Application) {

@@ -45,7 +45,7 @@ $user = Yii::$app->getUser();
         $items[] = ['label' => 'Регистрация', 'url' => $user->registrationUrl];
     } else {
         $items[] = [
-            'label' => 'Logout (' . $user->username . ')',
+            'label' => 'Logout (' . $user->identity->username . ')',
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];

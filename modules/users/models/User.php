@@ -39,6 +39,8 @@ class User extends ActiveRecord implements IdentityInterface
     const AFTER_LOGIN = 'afterLogin';
     const BEFORE_LOGOUT = 'beforeLogout';
     const AFTER_LOGOUT = 'afterLogout';
+    const BEFORE_CONFIRM = 'beforeConfirm';
+    const AFTER_CONFIRM = 'afterConfirm';
 
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
@@ -138,7 +140,20 @@ class User extends ActiveRecord implements IdentityInterface
         return true;
     }
 
-    private function add($confirmationRequired)
+    public function confirm()
+    {
+        $this->trigger(self::BEFORE_CONFIRM);
+
+        if (!(bool)$this->updateAttributes(['confirmed_at' => time()])) {
+            return false;
+        }
+
+        $this->trigger(self::AFTER_CONFIRM);
+
+        return true;
+    }
+
+    protected function add($confirmationRequired)
     {
         if ($this->getIsNewRecord() == false) {
             throw new \RuntimeException('Calling "' . __CLASS__ . '::' . __METHOD__ . '" on existing user');
@@ -146,8 +161,8 @@ class User extends ActiveRecord implements IdentityInterface
 
         $password = $this->password ? $this->password : Password::generate(8);
         $this->password_hash = Password::hash($password);
-        $this->confirmed_at = $confirmationRequired ? null : time();
         $this->auth_key = Yii::$app->security->generateRandomString();
+        $this->confirmed_at = $confirmationRequired ? null : time();
 
         if (Yii::$app instanceof \yii\web\Application) {
             $this->registration_ip = Yii::$app->request->userIP;
@@ -155,6 +170,11 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (!$this->save()) {
             return false;
+        }
+
+        if ($confirmationRequired) {
+            $token = Yii::createObject(['class' => Token::className(), 'type' => Token::TYPE_CONFIRMATION]);
+            $token->link('user', $this);
         }
 
         return true;

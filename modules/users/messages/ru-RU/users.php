@@ -1,15 +1,25 @@
 <?php
 return [
+    /* Поля форм */
     'Login or email' => 'Логин или email',
     'Password' => 'Пароль',
     'Remember me' => 'Запомнить меня',
     'Username' => 'Имя пользователя',
+    /* Системные сообщения */
+    /* Логин */
     'Invalid login or password' => 'Неверный логин или пароль',
     'You need to confirm your email address' => 'Необходимо активировать аккаунт',
     'Your account has been blocked' => 'Ваш аккаунт заблокирован',
+    /* Регистрация */
+    'Registration' => 'Регистрация',
+    'Your account has been created, you can already start using the system' => 'Ваш аккаунт был создан, теперь вы можете начать пользоваться системой',
+    'Your account has been created and a message with further instructions has been sent to your email' => 'Ваш аккаунт создан и сообщение с дальнейшими инструкциями отправлено на ваш email',
     'This username has already been taken' => 'Это имя пользователя уже занято',
     'This email address has already been taken' => 'Этот email адрес уже используется',
     "Passwords don't match" => 'Пароли не совпадают',
-    'Your account has been created and a message with further instructions has been sent to your email' =>
-        'Ваш аккаунт создан и сообщение с дальнейшими инструкциями отправлено на ваш email'
+    /* Активация */
+    'Activation of account' => 'Активация учетной записи',
+    'The confirmation link is invalid or expired, please try requesting a new one' => 'Ссылка для активации аккаунта неправильна или она устарела, попробуйте запросить новую',
+    'Thank you, registration is now complete' => 'Ваша учетная запись успешно активирована',
+    'Something went wrong and your account has not been confirmed' => 'Что-то пошло не так, учетная запись не активирована',
 ];

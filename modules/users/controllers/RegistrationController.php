@@ -21,9 +21,16 @@ class RegistrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->register()) {
 
+            if($module->enableConfirmation) {
+                $message = Yii::t('users', 'Your account has been created and a message with further instructions has been sent to your email');
+            } else {
+                Yii::$app->user->login($model->user, $module->rememberMe);
+                $message = Yii::t('users', 'Your account has been created, you can already start using the system');
+            }
+
             return $this->render('/message', [
-                'title'  => Yii::t('users', 'Your account has been created'),
-                'module' => $this->module,
+                'title'  => Yii::t('users', 'Registration'),
+                'message' => $message,
             ]);
         }
 

@@ -25,12 +25,12 @@ class m151123_081351_users_tables extends Migration
 
         $this->createTable('{{%users_token}}', [
             'user_id' => $this->integer()->notNull(),
-            'token' => $this->string(32)->notNull(),
+            'code' => $this->string(32)->notNull(),
             'created_at' => $this->integer()->notNull(),
             'type' => $this->smallInteger()->notNull(),
         ]);
 
-        $this->createIndex('token_unique', '{{%users_token}}', ['user_id', 'token', 'type'], true);
+        $this->createIndex('token_unique', '{{%users_token}}', ['user_id', 'code', 'type'], true);
         $this->addForeignKey('fk_users_token', '{{%users_token}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'CASCADE');
 
         $this->createTable('{{%users_field}}', [
