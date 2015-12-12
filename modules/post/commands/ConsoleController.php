@@ -3,18 +3,20 @@
 namespace app\modules\post\commands;
 
 use Yii;
+use yii\console\Controller;
+use app\components\Core;
 
-class ConsoleController extends \app\components\ConsoleController
+class ConsoleController extends Controller
 {
-    const MIGRATION_PATH = '@app/modules/post/migrations';
+    public $migrationsPath = '@app/modules/post/migrations';
 
     public function actionInstall()
     {
-        $this->migrate(self::MIGRATE_UP, self::MIGRATION_PATH);
+        Core::migrate('up', $this->migrationsPath);
     }
 
     public function actionUninstall()
     {
-        $this->migrate(self::MIGRATE_DOWN, self::MIGRATION_PATH);
+        Core::migrate('down', $this->migrationsPath);
     }
 }

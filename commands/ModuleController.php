@@ -21,7 +21,7 @@ class ModuleController extends Controller
         ];
 
         Yii::$app->runAction($module . '/' . $action);
-
+        $this->stdout("$module/$action is completed\n", Console::FG_GREEN);
         return Controller::EXIT_CODE_NORMAL;
     }
 }

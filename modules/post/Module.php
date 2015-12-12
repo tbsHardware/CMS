@@ -48,5 +48,4 @@ class Module extends BaseModule implements BootstrapInterface
         }
         return $paths;
     }
-
 }

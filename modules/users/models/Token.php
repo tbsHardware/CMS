@@ -68,9 +68,24 @@ class Token extends ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
+
         if ($insert) {
-            // Тут надо бы отправить на email пользователю ссылку
-            // Сделать что то типо switch по type, использовать разные шаблоны для писем
+
+            switch ($this->type) {
+                case self::TYPE_CONFIRMATION:
+
+                    break;
+                case self::TYPE_CONFIRM_NEW_EMAIL:
+                    break;
+                case self::TYPE_CONFIRM_OLD_EMAIL:
+
+                    break;
+                case self::TYPE_RECOVERY:
+
+                    break;
+                default:
+                    throw new \RuntimeException();
+            }
         }
     }
 

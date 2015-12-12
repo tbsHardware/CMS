@@ -1,14 +1,13 @@
 <?php
 
-namespace app\commands;
+namespace app\components;
 
 use Yii;
-use yii\console\Controller;
-use yii\helpers\Console;
+use yii\console\controllers\MigrateController;
 
-class ServiceController extends Controller
+class Core extends \yii\base\Component
 {
-    public function actionClear()
+    public static function clearAssets()
     {
         $assetsPath = Yii::getAlias("@webroot") . '/assets';
         $it = new \RecursiveDirectoryIterator($assetsPath, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -20,7 +19,14 @@ class ServiceController extends Controller
                 unlink($file->getRealPath());
             }
         }
-        $this->stdout("Assets successfully cleared\n", Console::FG_GREEN);
-        return Controller::EXIT_CODE_NORMAL;
+    }
+
+    public static function migrate($action, $path, $params = [])
+    {
+        $params['migrationPath'] = $path;
+        $params['interactive'] = false;
+
+        $migration = new MigrateController('migrate', Yii::$app);
+        $migration->runAction($action, $params);
     }
 }

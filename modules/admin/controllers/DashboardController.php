@@ -9,6 +9,6 @@ class DashboardController extends Controller
 {
     public function actionIndex()
     {
-        echo 'ok';
+        return $this->render('index');
     }
 }

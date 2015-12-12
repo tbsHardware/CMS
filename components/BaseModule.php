@@ -9,6 +9,8 @@ class BaseModule extends \yii\base\Module
 {
     public $sourceLanguage = 'en-US';
 
+    protected $_migrationsPath = false;
+
     public function init()
     {
         parent::init();
@@ -25,5 +27,16 @@ class BaseModule extends \yii\base\Module
                 }
             }
         }
+    }
+
+    public function getMigrationsPath()
+    {
+        if($this->_migrationsPath === false) {
+            $this->_migrationsPath = $this->basePath . '/migrations';
+            if(!file_exists($this->_migrationsPath)) {
+                $this->_migrationsPath = null;
+            }
+        }
+        return $this->_migrationsPath;
     }
 }
