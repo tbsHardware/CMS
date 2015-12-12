@@ -22,4 +22,13 @@ return [
     'The confirmation link is invalid or expired, please try requesting a new one' => 'Ссылка для активации аккаунта неправильна или она устарела, попробуйте запросить новую',
     'Thank you, registration is now complete' => 'Ваша учетная запись успешно активирована',
     'Something went wrong and your account has not been confirmed' => 'Что-то пошло не так, учетная запись не активирована',
+    /* Письма */
+    /* Регистрация */
+    'Hello' => 'Здравствуйте',
+    'Registration on {0}' => 'Регистрация на {0}',
+    'Your account on {0} has been created' => 'Ваш аккаунт на {0} был успешно создан',
+    'Your password of account' => 'Ваш пароль от аккаунта',
+    'In order to complete your registration, please click the link below' => 'Чтобы активировать ваш аккаунт, пожалуйста, нажмите на ссылку ниже',
+    'If you cannot click the link, please try pasting the text into your browser' => 'Если вы не можете нажать на ссылку, скопируйте ее и вставьте в адресную строку вашего браузера',
+    'If you did not make this request you can ignore this email' => 'P.S. Если вы получили это сообщение по ошибке, просто удалите его',
 ];

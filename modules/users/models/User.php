@@ -148,6 +148,8 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
+        $this->assignRole('user');
+
         $this->trigger(self::AFTER_CONFIRM);
 
         return true;
@@ -175,9 +177,54 @@ class User extends ActiveRecord implements IdentityInterface
         if ($confirmationRequired) {
             $token = Yii::createObject(['class' => Token::className(), 'type' => Token::TYPE_CONFIRMATION]);
             $token->link('user', $this);
+        } else {
+            $this->assignRole('user');
         }
 
+        $this->sendMail(
+            Yii::t('users', 'Registration on {0}', Yii::$app->name),
+            'registration',
+            [
+                'password' => (Yii::$app->getModule('users')->sendPassword || !$this->password) ? $password : null,
+                'token' => isset($token) ? $token : null,
+            ]
+        );
+
         return true;
+    }
+
+    public function assignRole($role)
+    {
+        $authManager = Yii::$app->getAuthManager();
+        $role = $authManager->getRole($role);
+        if ($role) {
+            return $authManager->assign($role, $this->getId());
+        }
+        return false;
+    }
+
+    public function assignPermission($permission)
+    {
+        $authManager = Yii::$app->getAuthManager();
+        $permission = $authManager->getPermission($permission);
+        if ($permission) {
+            return $authManager->assign($permission, $this->getId());
+        }
+        return false;
+    }
+
+    public function sendMail($subject, $view, $params = [])
+    {
+        /** @var \yii\mail\BaseMailer $mailer */
+        $mailer = Yii::$app->mailer;
+        $view = '@users/views/mail/' . $view;
+        $mailer->getView()->theme = Yii::$app->view->theme;
+
+        return $mailer->compose(['html' => $view], $params)
+            ->setTo($this->email)
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setSubject($subject)
+            ->send();
     }
 
     /**
@@ -199,24 +246,12 @@ class User extends ActiveRecord implements IdentityInterface
         return (bool)$this->updateAttributes(['blocked_at' => null]);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
+    public function afterDelete()
     {
-        return [
-            'id' => 'ID',
-            'username' => 'Username',
-            'email' => 'Email',
-            'password_hash' => 'Password Hash',
-            'auth_key' => 'Auth Key',
-            'unconfirmed_email' => 'Unconfirmed Email',
-            'registration_ip' => 'Registration Ip',
-            'confirmed_at' => 'Confirmed At',
-            'blocked_at' => 'Blocked At',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
+        parent::afterDelete();
+
+        $authManager = Yii::$app->getAuthManager();
+        $authManager->revokeAll($this->id);
     }
 
     /**

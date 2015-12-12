@@ -8,11 +8,9 @@ use app\components\Core;
 
 class ConsoleController extends Controller
 {
-    public $migrationsPath = '@app/modules/users/migrations';
-
     public function actionInstall()
     {
-        Core::migrate('up', $this->migrationsPath);
+        Core::migrate('up', '@users/migrations');
 
         $authManager = Yii::$app->getAuthManager();
 
@@ -29,16 +27,17 @@ class ConsoleController extends Controller
         $authManager->add($delete);
 
         $user = $authManager->getRole('user');
-        $authManager->addChild($user, $profile);
-
+        $moder = $authManager->getRole('moder');
         $admin = $authManager->getRole('admin');
-        $authManager->addChild($admin, $edit);
+
+        $authManager->addChild($user, $profile);
+        $authManager->addChild($moder, $edit);
         $authManager->addChild($admin, $delete);
     }
 
     public function actionUninstall()
     {
-        //Core::migrate('down', $this->migrationsPath);
+        //Core::migrate('down', '@users/migrations');
 
         $authManager = Yii::$app->getAuthManager();
 

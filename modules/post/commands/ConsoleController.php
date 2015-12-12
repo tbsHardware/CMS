@@ -17,6 +17,6 @@ class ConsoleController extends Controller
 
     public function actionUninstall()
     {
-        Core::migrate('down', $this->migrationsPath);
+        //Core::migrate('down', $this->migrationsPath);
     }
 }

@@ -7,5 +7,8 @@ return [
             'username' => 'root',
             'password' => 'password',
         ],
+        'mailer' => [
+            'useFileTransport' => true,
+        ],
     ],
 ];

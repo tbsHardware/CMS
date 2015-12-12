@@ -12,7 +12,7 @@ class LoginController extends Controller
     public function actionIndex()
     {
         if (!Yii::$app->user->isGuest) {
-            $this->goHome();
+            return $this->goHome();
         }
 
         $this->trigger(User::BEFORE_LOGIN);

@@ -5,6 +5,7 @@ namespace app\modules\users\models;
 use Yii;
 use yii\db\ActiveRecord;
 use app\modules\users\models\query\TokenQuery;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "users_token".
@@ -22,6 +23,8 @@ class Token extends ActiveRecord
     const TYPE_RECOVERY          = 1;
     const TYPE_CONFIRM_NEW_EMAIL = 2;
     const TYPE_CONFIRM_OLD_EMAIL = 3;
+
+    private $_url;
 
     /**
      * @inheritdoc
@@ -65,28 +68,28 @@ class Token extends ActiveRecord
         return parent::beforeSave($insert);
     }
 
-    public function afterSave($insert, $changedAttributes)
+    public function getUrl()
     {
-        parent::afterSave($insert, $changedAttributes);
-
-        if ($insert) {
+        if ($this->_url === null) {
 
             switch ($this->type) {
                 case self::TYPE_CONFIRMATION:
-
-                    break;
-                case self::TYPE_CONFIRM_NEW_EMAIL:
-                    break;
-                case self::TYPE_CONFIRM_OLD_EMAIL:
-
+                    $route = '/users/registration/confirm';
                     break;
                 case self::TYPE_RECOVERY:
-
+                    $route = '/users/recovery/reset';
+                    break;
+                case self::TYPE_CONFIRM_NEW_EMAIL:
+                case self::TYPE_CONFIRM_OLD_EMAIL:
+                    $route = '/user/settings/confirm';
                     break;
                 default:
                     throw new \RuntimeException();
             }
+
+            $this->_url = Url::to([$route, 'code' => $this->code], true);
         }
+        return $this->_url;
     }
 
     /**

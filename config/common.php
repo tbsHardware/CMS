@@ -11,6 +11,7 @@ return [
     'bootstrap' => ['log'],
     'aliases' => [
         '@webroot' => $rootDir . '/web',
+        '@modules' => $rootDir . '/modules'
     ],
     'components' => [
         'db' => [
@@ -28,6 +29,9 @@ return [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
         ],
     ],
     'params' => $params,

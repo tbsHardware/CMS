@@ -16,6 +16,8 @@ class Module extends BaseModule implements BootstrapInterface
 
     public $enableUnconfirmedLogin = false;
 
+    public $sendPassword = false;
+
     public $loginUrl = ['/users/login'];
 
     public $logoutUrl = ['/users/logout'];

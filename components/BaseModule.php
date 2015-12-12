@@ -15,6 +15,8 @@ class BaseModule extends \yii\base\Module
     {
         parent::init();
 
+        Yii::setAlias('@' . $this->id, $this->basePath);
+
         if(file_exists($this->basePath . '/messages')) {
             $i18n = Yii::$app->get('i18n');
             if ($i18n) {
