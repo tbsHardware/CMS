@@ -2,12 +2,12 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\modules\users\models\form\RegistrationForm */
+/* @var $model app\modules\users\models\form\RecoveryForm */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Регистрация';
+$this->title = 'Восстановление пароля';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="registration">
@@ -22,19 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'username') ?>
-
     <?= $form->field($model, 'email') ?>
-
-    <?= $form->field($model, 'password')->passwordInput() ?>
-
-    <?= $form->field($model, 'passwordRepeat')->passwordInput() ?>
 
     <?= $form->field($model, 'reCaptcha')->widget(\himiklab\yii2\recaptcha\ReCaptcha::className()) ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Восстановить', ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 

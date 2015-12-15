@@ -24,7 +24,7 @@ class Token extends ActiveRecord
     const TYPE_CONFIRM_NEW_EMAIL = 2;
     const TYPE_CONFIRM_OLD_EMAIL = 3;
 
-    private $_url;
+    protected $url;
 
     /**
      * @inheritdoc
@@ -70,7 +70,7 @@ class Token extends ActiveRecord
 
     public function getUrl()
     {
-        if ($this->_url === null) {
+        if ($this->url === null) {
 
             switch ($this->type) {
                 case self::TYPE_CONFIRMATION:
@@ -81,15 +81,15 @@ class Token extends ActiveRecord
                     break;
                 case self::TYPE_CONFIRM_NEW_EMAIL:
                 case self::TYPE_CONFIRM_OLD_EMAIL:
-                    $route = '/user/settings/confirm';
+                    $route = '/users/profile/confirm';
                     break;
                 default:
                     throw new \RuntimeException();
             }
 
-            $this->_url = Url::to([$route, 'code' => $this->code], true);
+            $this->url = Url::to([$route, 'code' => $this->code], true);
         }
-        return $this->_url;
+        return $this->url;
     }
 
     /**

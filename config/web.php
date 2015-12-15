@@ -31,6 +31,10 @@ $config = [
                 ],
             ],
         ],
+        'reCaptcha' => [
+            'name' => 'reCaptcha',
+            'class' => 'himiklab\yii2\recaptcha\ReCaptcha',
+        ],
     ],
 ];
 

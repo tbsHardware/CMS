@@ -30,7 +30,7 @@ class RegistrationController extends Controller
                 $message = Yii::t('users', 'Your account has been created and a message with further instructions has been sent to your email');
             } else {
                 Yii::$app->user->login($model->user, $module->rememberMe);
-                $message = Yii::t('users', 'Your account has been created, you can already start using the system');
+                $message = Yii::t('users', 'Thank you, registration is now complete, you can already start using the system');
             }
 
             return $this->render('/message', [
@@ -41,7 +41,6 @@ class RegistrationController extends Controller
 
         return $this->render('/registration', [
             'model' => $model,
-            'module' => $module,
         ]);
     }
 
@@ -60,7 +59,7 @@ class RegistrationController extends Controller
                     Yii::$app->user->login($token->user, Yii::$app->getModule('users')->rememberMe);
                 }
 
-                $message = Yii::t('users', 'Thank you, registration is now complete');
+                $message = Yii::t('users', 'Thank you, registration is now complete, you can already start using the system');
             } else {
                 $message = Yii::t('users', 'Something went wrong and your account has not been confirmed');
             }

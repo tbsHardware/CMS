@@ -19,5 +19,10 @@ return [
                 ],
             ],
         ],
+        'reCaptcha' => [
+            // Ключи нужно регистрировать https://www.google.com/recaptcha/intro/index.html
+            'siteKey' => '6LcEIBMTAAAAAIzOq9EkEvxVxr5zXXvqwC7pWklZ',
+            'secret' => '6LcEIBMTAAAAALjDjQzdRlWWVVTlmR8xuGP8e8kz',
+        ],
     ],
 ];

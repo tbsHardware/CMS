@@ -12,9 +12,11 @@ class RegistrationForm extends Model
     public $username;
     public $password;
     public $passwordRepeat;
-    public $captcha;
+    public $reCaptcha;
 
-    private $_user;
+    protected $user;
+
+    public static $usernameRegexp = '/^[-a-zA-Z0-9_\.@]+$/';
 
     /**
      * @inheritdoc
@@ -34,7 +36,7 @@ class RegistrationForm extends Model
             'usernameRequired' => ['username', 'required'],
             'usernameLength' => ['username', 'string', 'min' => 4, 'max' => 16],
             'usernameTrim' => ['username', 'filter', 'filter' => 'trim'],
-            'usernamePattern' => ['username', 'match', 'pattern' => User::$usernameRegexp],
+            'usernamePattern' => ['username', 'match', 'pattern' => self::$usernameRegexp],
             'usernameUnique' => [
                 'username',
                 'unique',
@@ -42,8 +44,8 @@ class RegistrationForm extends Model
                 'message' => Yii::t('users', 'This username has already been taken')
             ],
             // email rules
-            'emailTrim' => ['email', 'filter', 'filter' => 'trim'],
             'emailRequired' => ['email', 'required'],
+            'emailTrim' => ['email', 'filter', 'filter' => 'trim'],
             'emailPattern' => ['email', 'email'],
             'emailUnique' => [
                 'email',
@@ -60,26 +62,29 @@ class RegistrationForm extends Model
                 'message' => Yii::t('users', "Passwords don't match"),
             ],
             // captcha rules
-            'captchaRequired' => ['captcha', 'required'],
-            'captchaPattern' => ['captcha', 'captcha'],
+            'captchaValidator' => ['reCaptcha', \himiklab\yii2\recaptcha\ReCaptchaValidator::className()],
         ];
     }
 
     public function register()
     {
-        if (!$this->validate()) {
-            return false;
+        if ($this->validate()) {
+
+            $this->user = new User([
+                'username' => $this->username,
+                'email' => $this->email,
+                'password' => $this->password,
+            ]);
+
+            return $this->user->register();
         }
 
-        $this->_user = new User(['scenario' => User::SCENARIO_REGISTER]);
-        $this->_user->setAttributes($this->attributes);
-
-        return $this->_user->register();
+        return false;
     }
 
     public function getUser()
     {
-        return $this->_user;
+        return $this->user;
     }
 
     /**
@@ -88,9 +93,10 @@ class RegistrationForm extends Model
     public function attributeLabels()
     {
         return [
-            'email' => 'Email',
             'username' => Yii::t('users', 'Username'),
             'password' => Yii::t('users', 'Password'),
+            'passwordRepeat' => Yii::t('users', 'Repeat password'),
+            'reCaptcha' => Yii::t('users', 'Captcha'),
         ];
     }
 }
