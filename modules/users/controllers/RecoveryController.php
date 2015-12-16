@@ -11,6 +11,10 @@ class RecoveryController extends Controller
 {
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = new RecoveryForm(['scenario' => RecoveryForm::SCENARIO_REQUEST]);
 
         if ($model->load(Yii::$app->request->post()) && $model->sendRecoveryMessage()) {

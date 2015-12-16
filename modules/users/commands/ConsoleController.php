@@ -10,7 +10,7 @@ class ConsoleController extends Controller
 {
     public function actionInstall()
     {
-        Core::migrate('up', '@users/migrations');
+        Core::migrate('up', '@app/modules/users/migrations');
 
         $authManager = Yii::$app->getAuthManager();
 

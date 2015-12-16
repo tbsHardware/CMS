@@ -3,6 +3,7 @@
 namespace app\modules\users\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -17,15 +18,24 @@ use yii\db\ActiveRecord;
  * @property Field $field
  * @property User $user
  */
-class Profile extends ActiveRecord
+class UserField extends ActiveRecord
 {
-    private $_fields;
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%users_profile}}';
+        return '{{%users_user_field}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 
     /**
@@ -70,13 +80,5 @@ class Profile extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    public function getFields()
-    {
-        if ($this->_fields === NULL) {
-
-        }
-        return $this->_fields;
     }
 }

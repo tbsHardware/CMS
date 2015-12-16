@@ -10,8 +10,6 @@ use yii\widgets\Breadcrumbs;
 use app\themes\basic\assets\AppAsset;
 
 AppAsset::register($this);
-
-$user = Yii::$app->getUser();
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -40,15 +38,18 @@ $user = Yii::$app->getUser();
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']]
     ];
-    if ($user->isGuest) {
-        $items[] = ['label' => 'Вход', 'url' => $user->loginUrl];
-        $items[] = ['label' => 'Регистрация', 'url' => $user->registrationUrl];
+    if (Yii::$app->user->isGuest) {
+        $items[] = ['label' => 'Вход', 'url' => ['/users/login']];
+        $items[] = ['label' => 'Регистрация', 'url' => ['/users/registration']];
     } else {
-        $items[] = [
-            'label' => 'Logout (' . $user->identity->username . ')',
-            'url' => ['/site/logout'],
-            'linkOptions' => ['data-method' => 'post']
-        ];
+        $items[] =  '<li>'
+            . Html::beginForm(['/users/logout'], 'post')
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link']
+            )
+            . Html::endForm()
+            . '</li>';
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

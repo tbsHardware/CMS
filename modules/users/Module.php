@@ -18,16 +18,6 @@ class Module extends BaseModule implements BootstrapInterface
 
     public $sendPassword = false;
 
-    public $loginUrl = ['/users/login'];
-
-    public $logoutUrl = ['/users/logout'];
-
-    public $registrationUrl = ['/users/registration'];
-
-    public $recoveryUrl = ['/users/recovery'];
-
-    public $profileUrl = ['/users/profile'];
-
     public $rememberMe = 1209600; // two weeks
 
     public $confirmWithin = 86400; // 24 hours
@@ -39,13 +29,9 @@ class Module extends BaseModule implements BootstrapInterface
         if ($app instanceof \yii\console\Application) {
             $this->controllerNamespace = 'app\modules\users\commands\ConsoleController';
         } else {
-            Yii::$container->set('app\components\WebUser', [
+            Yii::$container->set('yii\web\User', [
                 'enableAutoLogin' => true,
-                'loginUrl' => $this->loginUrl,
-                'logoutUrl' => $this->logoutUrl,
-                'registrationUrl' => $this->registrationUrl,
-                'recoveryUrl' => $this->recoveryUrl,
-                'profileUrl' => $this->profileUrl,
+                'loginUrl' => ['/users/login'],
                 'identityClass' => 'app\modules\users\models\User',
             ]);
         }

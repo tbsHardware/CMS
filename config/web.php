@@ -20,9 +20,6 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
-        'user' => [
-            'class' => 'app\components\WebUser',
-        ],
         'i18n' => [
             'translations' => [
                 '*' => [

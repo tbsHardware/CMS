@@ -3,8 +3,6 @@
 namespace app\modules\users\models;
 
 use Yii;
-use yii\db\ActiveRecord;
-use app\modules\users\models\query\FieldQuery;
 
 /**
  * This is the model class for table "users_field".
@@ -12,6 +10,8 @@ use app\modules\users\models\query\FieldQuery;
  * @property integer $id
  * @property string $alias
  * @property string $title
+ * @property integer $visible
+ * @property integer $position
  * @property string $field_type
  * @property integer $field_size_min
  * @property integer $field_size_max
@@ -19,8 +19,10 @@ use app\modules\users\models\query\FieldQuery;
  * @property string $default
  * @property string $range
  * @property string $other_validator
+ *
+ * @property UserField[] $userFields
  */
-class Field extends ActiveRecord
+class Field extends \yii\db\ActiveRecord
 {
     const VISIBLE_ALL = 3;
     const VISIBLE_REGISTER_USER = 2;
@@ -28,16 +30,13 @@ class Field extends ActiveRecord
     const VISIBLE_NO = 0;
 
     const REQUIRED_NO = 0;
-    const REQUIRED_YES_SHOW_REG = 1;
-    const REQUIRED_NO_SHOW_REG = 2;
-    const REQUIRED_YES_NOT_SHOW_REG = 3;
-
+    const REQUIRED_YES = 1;
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%users_field}}';
+        return 'users_field';
     }
 
     /**
@@ -47,7 +46,7 @@ class Field extends ActiveRecord
     {
         return [
             [['alias', 'title'], 'required'],
-            [['field_size_min', 'field_size_max', 'required'], 'integer'],
+            [['visible', 'position', 'field_size_min', 'field_size_max', 'required'], 'integer'],
             [['alias', 'field_type'], 'string', 'max' => 32],
             [['title', 'default', 'range', 'other_validator'], 'string', 'max' => 255],
         ];
@@ -62,6 +61,8 @@ class Field extends ActiveRecord
             'id' => 'ID',
             'alias' => 'Alias',
             'title' => 'Title',
+            'visible' => 'Visible',
+            'position' => 'Position',
             'field_type' => 'Field Type',
             'field_size_min' => 'Field Size Min',
             'field_size_max' => 'Field Size Max',
@@ -72,8 +73,11 @@ class Field extends ActiveRecord
         ];
     }
 
-    public static function find()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserFields()
     {
-        return new FieldQuery(get_called_class());
+        return $this->hasMany(UserField::className(), ['field_id' => 'id']);
     }
 }

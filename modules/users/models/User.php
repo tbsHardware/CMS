@@ -3,7 +3,6 @@
 namespace app\modules\users\models;
 
 use Yii;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -26,7 +25,6 @@ use app\modules\users\models\query\UserQuery;
  * @property integer $updated_at
  *
  * @property Token[] $tokens
- * @property Profile[] $profile
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -42,6 +40,8 @@ class User extends ActiveRecord implements IdentityInterface
     const AFTER_CONFIRM = 'afterConfirm';
 
     public $password;
+
+    protected $profile;
 
     /**
      * @inheritdoc
@@ -165,7 +165,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         /** @var \yii\mail\BaseMailer $mailer */
         $mailer = Yii::$app->mailer;
-        $view = '@users/mail/views/' . $view;
+        $view = '@app/modules/users/mail/views/' . $view;
         $mailer->getView()->theme = Yii::$app->view->theme;
 
         return $mailer->compose(['html' => $view], $params)
@@ -236,7 +236,7 @@ class User extends ActiveRecord implements IdentityInterface
     /** @inheritdoc */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('Method "' . __CLASS__ . '::' . __METHOD__ . '" is not implemented.');
+        throw new \yii\base\NotSupportedException('Method "' . __CLASS__ . '::' . __METHOD__ . '" is not implemented.');
     }
 
     /** @inheritdoc */
@@ -276,12 +276,33 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Token::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    public function getUserField()
+    {
+        return $this->hasMany(UserField::className(), ['user_id' => 'id']);
+    }
+
     public function getProfile()
     {
-        return $this->hasMany(Profile::className(), ['user_id' => 'id']);
+        if ($this->profile === NULL) {
+
+            if (Yii::$app->user->isGuest) {
+                $visible = Field::VISIBLE_ALL;
+            } elseif (Yii::$app->user->id === $this->id) {
+                $visible = Field::VISIBLE_ONLY_OWNER;
+            } else {
+                $visible = Field::VISIBLE_REGISTER_USER;
+            }
+
+            return (new \yii\db\Query())
+                ->select(['title', 'value'])
+                ->from(self::tableName() . ' as t1')
+                ->innerJoin(UserField::tableName() . ' as t2' , 't2.user_id = t1.id')
+                ->innerJoin(Field::tableName() . ' as t3' , 't3.id = t2.field_id')
+                ->where('t1.id = :id and t3.visible >= :vis', [':id' => $this->id, ':vis' => $visible])
+                ->all();
+        }
+
+        return $this->profile;
     }
 
     public static function find()

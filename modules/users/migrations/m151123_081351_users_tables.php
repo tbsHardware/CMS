@@ -48,7 +48,7 @@ class m151123_081351_users_tables extends Migration
             'other_validator' => $this->string(255),
         ]);
 
-        $this->createTable('{{%users_profile}}', [
+        $this->createTable('{{%users_profile_field}}', [
             'user_id' => $this->integer()->notNull(),
             'field_id' => $this->integer()->notNull(),
             'value' => $this->text()->notNull(),
@@ -56,8 +56,8 @@ class m151123_081351_users_tables extends Migration
             'updated_at' => $this->integer()->notNull(),
         ]);
 
-        $this->addForeignKey('fk1_users_profile', '{{%users_profile}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk2_users_profile', '{{%users_profile}}', 'field_id', '{{%users_field}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk1_users_profile_field', '{{%users_profile_field}}', 'user_id', '{{%users_user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk2_users_profile_field', '{{%users_profile_field}}', 'field_id', '{{%users_field}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()
@@ -65,6 +65,6 @@ class m151123_081351_users_tables extends Migration
         $this->dropTable('{{%users_user}}');
         $this->dropTable('{{%users_token}}');
         $this->dropTable('{{%users_field}}');
-        $this->dropTable('{{%users_profile}}');
+        $this->dropTable('{{%users_profile_field}}');
     }
 }

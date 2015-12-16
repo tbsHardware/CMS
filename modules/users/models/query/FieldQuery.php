@@ -23,12 +23,6 @@ class FieldQuery extends ActiveQuery
         return $this->andWhere(['visible' => Field::VISIBLE_ONLY_OWNER])->addOrderBy('position');
     }
 
-    public function forRegistration()
-    {
-        return $this->andWhere(['required' => Field::REQUIRED_NO_SHOW_REG])
-            ->orWhere(['required' => Field::REQUIRED_YES_SHOW_REG])->addOrderBy('position');
-    }
-
     public function sorted()
     {
         return $this->addOrderBy('position');
