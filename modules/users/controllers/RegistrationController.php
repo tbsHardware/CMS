@@ -4,7 +4,6 @@ namespace app\modules\users\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use app\modules\users\models\form\RegistrationForm;
 use app\modules\users\models\Token;
 
@@ -19,7 +18,7 @@ class RegistrationController extends Controller
         $module = Yii::$app->getModule('users');
 
         if (!$module->enableRegistration) {
-            throw new NotFoundHttpException();
+            throw new \yii\web\NotFoundHttpException();
         }
 
         $model = new RegistrationForm();

@@ -5,7 +5,8 @@ namespace app\modules\users\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
+use app\modules\users\models\User;
+use yii\web\NotFoundHttpException;
 
 class ProfileController extends Controller
 {
@@ -14,30 +15,50 @@ class ProfileController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
                 'rules' => [
+                    ['allow' => true, 'actions' => ['index'], 'roles' => ['@']],
+                    ['allow' => true, 'actions' => ['view'], 'roles' => ['users_view']],
                     [
-                        'actions' => ['index'],
                         'allow' => true,
+                        'actions' => ['update'],
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->can('users_update') ||
+                                Yii::$app->request->get('id') == Yii::$app->user->id;
+                        }
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
                 ],
             ],
         ];
     }
 
+
     public function actionIndex()
     {
-        $profile = [];
+        return $this->render('index', [
+            'profile' => Yii::$app->user->identity->profile,
+        ]);
+    }
+
+    public function actionView($id)
+    {
+        $user = User::find()->byId($id)->one();
+        if ($user === null) {
+            throw new NotFoundHttpException();
+        }
 
         return $this->render('index', [
-            'profile' => $profile,
+            'profile' => $user->profile,
         ]);
+    }
+
+    public function actionUpdate($id = null)
+    {
+        $id = $id ? $id : Yii::$app->user->id;
+
+        $user = User::find()->byId($id)->one();
+        if ($user === null) {
+            throw new NotFoundHttpException();
+        }
     }
 }

@@ -14,24 +14,24 @@ class ConsoleController extends Controller
 
         $authManager = Yii::$app->getAuthManager();
 
-        $profile = $authManager->createPermission('users_profile');
-        $edit = $authManager->createPermission('users_edit');
+        $view = $authManager->createPermission('users_view');
+        $update = $authManager->createPermission('users_update');
         $delete = $authManager->createPermission('users_delete');
 
-        $profile->description = 'Просмотр профиля';
-        $edit->description = 'Редактирование пользователя';
+        $view->description = 'Просмотр профиля';
+        $update->description = 'Редактирование пользователя';
         $delete->description = 'Удаление пользователя';
 
-        $authManager->add($profile);
-        $authManager->add($edit);
+        $authManager->add($view);
+        $authManager->add($update);
         $authManager->add($delete);
 
         $user = $authManager->getRole('user');
         $moder = $authManager->getRole('moder');
         $admin = $authManager->getRole('admin');
 
-        $authManager->addChild($user, $profile);
-        $authManager->addChild($moder, $edit);
+        $authManager->addChild($user, $view);
+        $authManager->addChild($moder, $update);
         $authManager->addChild($admin, $delete);
     }
 
