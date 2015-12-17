@@ -5,6 +5,7 @@ namespace app\modules\admin;
 use Yii;
 use app\components\BaseModule;
 use yii\base\Theme;
+use yii\web\ForbiddenHttpException;
 
 class Module extends BaseModule
 {
@@ -20,8 +21,35 @@ class Module extends BaseModule
 
     private $_managedModules;
 
+    public $controlMenu = [
+        [
+            'label' => 'Панель управления',
+            'icon' => 'home',
+            'action' => 'dashboard/index',
+        ],
+        [
+            'label' => 'Контроль доступа',
+            'role' => 'admin_rbac',
+            'icon' => 'lock',
+            'items' => [
+                [
+                    'label' => 'Роли',
+                    'action' => 'access/roles',
+                ],
+                [
+                    'label' => 'Правила',
+                    'action' => 'access/permission',
+                ],
+            ]
+        ],
+    ];
+
     public function init()
     {
+        if (!Yii::$app->user->can('admin_panel')) {
+            throw new ForbiddenHttpException();
+        }
+
         parent::init();
 
         foreach ($this->getManagedModules() as $id => $module) {

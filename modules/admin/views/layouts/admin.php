@@ -8,6 +8,8 @@ use app\modules\admin\assets\AppAsset;
 use wfcreations\simplelineicons\SLI;
 
 $bundle = AppAsset::register($this);
+$adminModule = Yii::$app->getModule('admin');
+$url = Yii::$app->request->url;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -35,11 +37,12 @@ $bundle = AppAsset::register($this);
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <!-- Здесь должен быть автар -->
                         <img alt="" class="img-circle" src="http://www.keenthemes.com/preview/metronic/theme/assets/layouts/layout/img/avatar3_small.jpg" />
-                        <span class="username username-hide-on-mobile">Администратор<!-- Здесь должен быть логин --></span>
+                        <span class="username username-hide-on-mobile"><?= Yii::$app->user->identity->username ?></span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li><?= Html::a(SLI::icon('key') . 'Выход', Url::to(Yii::$app->user->logoutUrl)) ?></li>
+                        <li><?= Html::a(SLI::icon('key') . 'Выход', Url::to(['dashboard/logout']),
+                                ['data-method' => 'post']) ?></li>
                     </ul>
                 </li>
             </ul>
@@ -51,17 +54,7 @@ $bundle = AppAsset::register($this);
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
-    <div class="page-sidebar-wrapper">
-        <div class="page-sidebar navbar-collapse collapse">
-            <ul class="page-sidebar-menu page-header-fixed scroller" data-keep-expanded="false" data-auto-scroll="true"
-                data-slide-speed="200">
-                <li class="sidebar-toggler-wrapper hide">
-                    <div class="sidebar-toggler"></div>
-                </li>
-
-            </ul>
-        </div>
-    </div>
+    <?= \app\modules\admin\widgets\PageSidebar::widget(); ?>
     <!-- END SIDEBAR -->
     <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper">

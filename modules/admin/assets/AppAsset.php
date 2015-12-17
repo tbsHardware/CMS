@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/app.min.js',
+        'js/layout.min.js',
         'js/bootstrap-hover-dropdown.min.js',
         'js/jquery.slimscroll.min.js',
     ];

@@ -42,14 +42,11 @@ AppAsset::register($this);
         $items[] = ['label' => 'Вход', 'url' => ['/users/login']];
         $items[] = ['label' => 'Регистрация', 'url' => ['/users/registration']];
     } else {
-        $items[] =  '<li>'
-            . Html::beginForm(['/users/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link']
-            )
-            . Html::endForm()
-            . '</li>';
+        $items[] = [
+            'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+            'url' => ['/users/logout'],
+            'linkOptions' => ['data-method' => 'post']
+        ];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

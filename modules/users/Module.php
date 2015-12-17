@@ -24,6 +24,25 @@ class Module extends BaseModule implements BootstrapInterface
 
     public $recoverWithin = 21600; // 6 hours
 
+    public $controlMenu = [
+        [
+            'label' => 'Пользователи',
+            'role' => 'users_access',
+            'icon' => 'people',
+            'items' => [
+                [
+                    'label' => 'Все пользователи',
+                    'action' => 'users/index',
+                ],
+                [
+                    'label' => 'Добавить нового',
+                    'action' => 'users/add',
+                    'role' => 'users_add',
+                ],
+            ]
+        ],
+    ];
+
     public function bootstrap($app)
     {
         if ($app instanceof \yii\console\Application) {

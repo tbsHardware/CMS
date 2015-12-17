@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 
-class DashboardController extends Controller
+class AccessController extends Controller
 {
     public function behaviors()
     {
@@ -16,13 +16,13 @@ class DashboardController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['index'],
                 'rules' => [
-                    ['actions' => ['index', 'logout'], 'allow' => true, 'roles' => ['admin_panel']],
+                    ['actions' => ['index', 'add', 'update'], 'allow' => true, 'roles' => ['admin_rbac']],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'delete' => ['post'],
                 ],
             ],
         ];
@@ -31,12 +31,5 @@ class DashboardController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
-    }
-
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
     }
 }

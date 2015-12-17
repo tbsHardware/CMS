@@ -9,6 +9,10 @@ class BaseModule extends \yii\base\Module
 {
     public $sourceLanguage = 'en-US';
 
+    public $title;
+
+    public $controlMenu = [];
+
     protected $_migrationsPath = false;
 
     public function init()
