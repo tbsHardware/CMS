@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\admin\widgets;
+namespace app\modules\admin\widgets\nav;
 
 use Yii;
 use yii\base\Widget;

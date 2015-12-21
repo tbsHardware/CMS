@@ -7,7 +7,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use app\modules\users\helpers\Password;
-use app\modules\users\models\query\UserQuery;
 
 /**
  * This is the model class for table "users_user".
@@ -307,6 +306,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function find()
     {
-        return new UserQuery(get_called_class());
+        return new \app\modules\users\models\query\UserQuery(get_called_class());
     }
 }

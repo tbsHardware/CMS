@@ -4,6 +4,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Breadcrumbs;
 use app\modules\admin\assets\AppAsset;
 use wfcreations\simplelineicons\SLI;
 
@@ -54,12 +55,23 @@ $url = Yii::$app->request->url;
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
-    <?= \app\modules\admin\widgets\PageSidebar::widget(); ?>
+    <?= \app\modules\admin\widgets\nav\PageSidebar::widget(); ?>
     <!-- END SIDEBAR -->
     <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper">
         <div class="page-content">
-
+            <div class="page-bar">
+                <?= Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    'itemTemplate' => "<li>{link} <i class='fa fa-circle'></i></li>\n",
+                    'activeItemTemplate' => "<li><span>{link}</span></li>\n",
+                    'options' => [
+                        'class' => 'page-breadcrumb',
+                    ],
+                ]) ?>
+            </div>
+            <h3 class="page-title"><?= $this->title ?></h3>
+            <?= $content ?>
         </div>
     </div>
     <!-- END CONTENT -->
