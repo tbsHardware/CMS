@@ -21,32 +21,21 @@ class UserSearch extends Model
     public $email;
 
     /** @var int */
-    public $created_at;
+    public $created_at_from;
+
+    /** @var int */
+    public $created_at_to;
 
     /** @var string */
     public $registration_ip;
-
-    public $pageSize;
 
     /** @inheritdoc */
     public function rules()
     {
         return [
-            'fieldsSafe' => [['id', 'username', 'email', 'registration_ip', 'created_at'], 'safe'],
-            'pageSizeRange' => [['pageSize'], 'number', 'min' => 10, 'max' => 100],
-
-        ];
-    }
-
-    /** @inheritdoc */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'username' => Yii::t('users', 'Username'),
-            'email' => Yii::t('users', 'Email'),
-            'created_at' => Yii::t('users', 'Registration time'),
-            'registration_ip' => Yii::t('users', 'Registration ip'),
+            [['id'], 'integer'],
+            [['username', 'email', 'registration_ip'], 'safe'],
+            [['created_at_from', 'created_at_to'], 'date', 'format' => 'php:d.m.Y'],
         ];
     }
 
@@ -61,19 +50,27 @@ class UserSearch extends Model
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pagesize' => $this->pageSize,
-            ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC],
+            ]
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
+        $this->load($params);
+
+        if (!$this->validate()) {
+            $query->where('0=1');
             return $dataProvider;
         }
+
+        $created_at_from = $this->created_at_from ? strtotime($this->created_at_from . ' 00:00:00') : null;
+        $created_at_to = $this->created_at_to ? strtotime($this->created_at_to . ' 23:59:59') : null;
 
         $query->andFilterWhere(['id' => $this->id])
             ->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['registration_ip' => $this->registration_ip]);
+            ->andFilterWhere(['registration_ip' => $this->registration_ip])
+            ->andFilterWhere(['>=', 'created_at', $created_at_from])
+            ->andFilterWhere(['<=', 'created_at', $created_at_to]);
 
         return $dataProvider;
     }

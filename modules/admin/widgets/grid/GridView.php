@@ -9,19 +9,21 @@ use yii\helpers\Html;
 
 class GridView extends \yii\grid\GridView
 {
-    public $tableOptions = ['class' => 'table table-striped table-bordered dataTable no-footer'];
+    public $tableOptions = ['class' => 'table table-striped table-bordered table-hover dataTable no-footer'];
 
-    public $sizerOptions = [
-        'class' => 'form-control input-sm input-xsmall input-inline',
-    ];
-
-    public $headerButtons;
+    public $enableSizer = true;
 
     public $sizerItems = [
         10 => 10,
         25 => 25,
         50 => 50,
     ];
+
+    public $sizerOptions = [
+        'class' => 'form-control input-sm input-xsmall input-inline',
+    ];
+
+    public $headerButtons;
 
     public $layout = "
         <div class='dataTables_wrapper no-footer'>
@@ -45,6 +47,17 @@ class GridView extends \yii\grid\GridView
 
     public function init() {
         parent::init();
+
+        if (!isset($this->sizerOptions['id'])) {
+            $this->sizerOptions['id'] = $this->id . '_pagesize';
+        }
+        $this->filterSelector = '#' . $this->sizerOptions['id'];
+
+        $pageSize = Yii::$app->request->getQueryParam($this->sizerOptions['id']);
+        if ($pageSize && isset($this->sizerItems[$pageSize])) {
+            $this->dataProvider->setPagination(['pageSize' => $pageSize]);
+        }
+
         $view = Yii::$app->getView();
         GridAsset::register($view);
     }
@@ -94,20 +107,15 @@ class GridView extends \yii\grid\GridView
 
     public function renderSizer()
     {
-        if ($this->filterModel instanceof \yii\base\Model && $this->filterModel->isAttributeActive('pageSize')) {
+        if ($this->enableSizer) {
 
-            if ($this->filterModel->hasErrors('pageSize')) {
-                Html::addCssClass($this->sizerOptions, 'has-error');
-                $error = ' ' . Html::error($this->filterModel, 'pageSize', $this->grid->filterErrorOptions);
-            } else {
-                $error = '';
-            }
+            $name = $this->sizerOptions['id'];
+            $value = Yii::$app->request->getQueryParam($name);
+            $select = Html::dropDownList($name, $value, $this->sizerItems, $this->sizerOptions);
 
-            $select = Html::activeDropDownList($this->filterModel, 'pageSize', $this->sizerItems, $this->sizerOptions);
-
-            return Html::tag('label', Yii::t('admin', 'Show {0}', $select . $error));
+            return Html::tag('label', Yii::t('admin', 'Show {0}', $select));
         }
 
-        return false;
+        return '';
     }
 }

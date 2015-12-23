@@ -8,6 +8,9 @@ return [
     'Remember me' => 'Запомнить меня',
     'Username' => 'Имя пользователя',
     'Captcha' => 'Проверка',
+    'Registration date' => 'Дата регистрации',
+    'Registration ip' => 'IP регистрации',
+    'Items on page' => 'Лимит на страницу',
     /* Системные сообщения */
     /* Логин */
     'Invalid login or password' => 'Неверный логин или пароль',

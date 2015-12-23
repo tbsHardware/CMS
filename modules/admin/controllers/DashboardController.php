@@ -14,7 +14,6 @@ class DashboardController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index'],
                 'rules' => [
                     ['actions' => ['index', 'logout'], 'allow' => true, 'roles' => ['admin_panel']],
                 ],

@@ -5,10 +5,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-use app\modules\admin\assets\AppAsset;
+use app\modules\admin\assets\AdminAsset;
 use wfcreations\simplelineicons\SLI;
 
-$bundle = AppAsset::register($this);
+$bundle = AdminAsset::register($this);
 $adminModule = Yii::$app->getModule('admin');
 $url = Yii::$app->request->url;
 ?>
