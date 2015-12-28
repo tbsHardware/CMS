@@ -33,12 +33,12 @@ class Module extends BaseModule
             'icon' => 'lock',
             'items' => [
                 [
-                    'label' => 'Роли',
-                    'action' => 'access/roles',
+                    'label' => 'Все роли',
+                    'action' => 'access/index',
                 ],
                 [
-                    'label' => 'Правила',
-                    'action' => 'access/permission',
+                    'label' => 'Добавить новую',
+                    'action' => 'access/add',
                 ],
             ]
         ],
@@ -46,11 +46,16 @@ class Module extends BaseModule
 
     public function init()
     {
-        if (!Yii::$app->user->can('admin_panel')) {
+        $user = Yii::$app->getUser();
+        if ($user->isGuest) {
+            Yii::$app->response->redirect($user->loginUrl);
+        } elseif (!$user->can('admin_panel')) {
             throw new ForbiddenHttpException();
         }
 
         parent::init();
+
+        Yii::$app->errorHandler->errorAction = '/admin/dashboard/error';
 
         foreach ($this->getManagedModules() as $id => $module) {
             $this->controllerMap[$id] = ['class' => $module->controllerNamespace . '\AdminController'];

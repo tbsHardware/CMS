@@ -94,9 +94,10 @@ class GridView extends \yii\grid\GridView
                 if (!isset($button['url']) || !isset($button['label'])) {
                     throw new \yii\base\InvalidConfigException("The 'url' and 'label' options is required.");
                 }
-
+                if (isset($button['visible']) && !$button['visible']) {
+                    continue;
+                }
                 $options = ArrayHelper::getValue($button, 'options');
-
                 $buttons .= Html::a($button['label'], $button['url'], $options);
             }
             $buttons .= Html::endTag('div');

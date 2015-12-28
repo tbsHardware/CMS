@@ -55,28 +55,36 @@ class AdminController extends Controller
 
     public function actionAdd()
     {
-
+        $this->redirect(['index']);
     }
 
     public function actionUpdate($id)
     {
         Url::remember('', 'actions-redirect');
         $user = $this->getUser($id);
+
+        $this->redirect(['index']);
     }
 
     public function actionConfirm($id)
     {
         $user = $this->getUser($id);
+        if ($user->isConfirmed) {
+            throw new BadRequestHttpException();
+        }
 
+        $user->confirm();
 
+        Yii::$app->getSession()->setFlash('success', Yii::t('users', 'User has been confirmed'));
+
+        return $this->redirect(Url::previous('actions-redirect'));
     }
 
     public function actionBlock($id)
     {
         if ($id == Yii::$app->user->id) {
-            Yii::$app->getSession()->setFlash('danger', Yii::t('users', 'You can not block your own account'));
+            Yii::$app->getSession()->setFlash('error', Yii::t('users', 'You can not block your own account!'));
         } else {
-
             $user = $this->getUser($id);
             if ($user->isBlocked) {
                 throw new BadRequestHttpException();
@@ -105,6 +113,15 @@ class AdminController extends Controller
     public function actionDelete($id)
     {
         $user = $this->getUser($id);
+
+        if ($id == Yii::$app->user->id) {
+            Yii::$app->getSession()->setFlash('error', Yii::t('users', 'You can not remove your own account!'));
+        } else {
+            $user->delete();
+            Yii::$app->getSession()->setFlash('success', Yii::t('users', 'User has been deleted'));
+        }
+
+        return $this->redirect(['index']);
     }
 
     /**

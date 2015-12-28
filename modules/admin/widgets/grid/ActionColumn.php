@@ -33,7 +33,7 @@ class ActionColumn extends \yii\grid\ActionColumn
             $this->buttons['delete'] = function ($url, $model, $key) {
                 $options = array_merge([
                     'aria-label' => Yii::t('yii', 'Delete'),
-                    'data-toggle' => 'confirmation',
+                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                     'data-method' => 'post',
                     'data-pjax' => '0',
                     'class' => 'btn btn-xs red btn-outline',

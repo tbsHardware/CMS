@@ -63,8 +63,8 @@ function getDateFilter($model, $attribute, $placeholder) {
                 [
                     'attribute' => 'created_at',
                     'label' => 'Дата регистрации',
-                    'format' =>  ['date', 'dd MMM yyyy [HH:mm]'],
-                    'options' => ['width' => '175'],
+                    'format' =>  ['date', 'dd MMMM yyyy - HH:mm'],
+                    'options' => ['width' => '200'],
                     'filter' => getDateFilter($searchModel, 'created_at_from', 'От') .
                         '<div class="margin-bottom-5"></div>' .
                         getDateFilter($searchModel, 'created_at_to', 'До'),
@@ -134,11 +134,11 @@ function getDateFilter($model, $attribute, $placeholder) {
                     'label' => 'Добавить нового <i class="fa fa-plus"></i>',
                     'url' => 'add',
                     'options' => ['class' => 'btn sbold green'],
+                    'visible' => Yii::$app->user->can("users_add"),
                 ],
             ],
         ]); ?>
 
         <?php Pjax::end() ?>
-
     </div>
 </div>

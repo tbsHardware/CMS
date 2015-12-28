@@ -95,8 +95,6 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $this->assignRole('user');
-
         $this->trigger(self::AFTER_CONFIRM);
 
         return true;
@@ -124,9 +122,9 @@ class User extends ActiveRecord implements IdentityInterface
         if ($confirmationRequired) {
             $token = new Token(['type' => Token::TYPE_CONFIRMATION]);
             $token->link('user', $this);
-        } else {
-            $this->assignRole('user');
         }
+
+        $this->assignRole('user');
 
         $this->sendMail(
             Yii::t('users', 'Registration on {0}', Yii::$app->name),

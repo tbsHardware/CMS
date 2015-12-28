@@ -15,13 +15,25 @@ class DashboardController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['actions' => ['index', 'logout'], 'allow' => true, 'roles' => ['admin_panel']],
+                    ['actions' => ['index', 'error', 'logout'], 'allow' => true, 'roles' => ['admin_panel']],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'app\components\ErrorAction',
+                'errorsView' => [
+                    404 => 'error404',
                 ],
             ],
         ];

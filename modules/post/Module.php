@@ -39,10 +39,10 @@ class Module extends BaseModule implements BootstrapInterface
     {
         $paths = [];
         if (Yii::$app->db->schema->getTableSchema(Page::tableName())) {
-            $pages = Page::find()->parent()->select('page_path')->all();
+            $pages = Page::find()->parent()->select('path')->all();
             if ($pages) {
                 foreach ($pages as $page) {
-                    $paths[] = $page->page_path;
+                    $paths[] = $page->path;
                 }
             }
         }

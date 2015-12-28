@@ -2,22 +2,24 @@
 
 namespace app\modules\post\models;
 
-use app\modules\post\models\query\PageQuery;
 use Yii;
 use yii\db\ActiveRecord;
+use app\modules\post\models\query\PageQuery;
 
 /**
  * This is the model class for table "post_page".
  *
  * @property integer $id
- * @property string $page_path
- * @property string $page_title
- * @property string $page_content
+ * @property string $path
+ * @property string $title
+ * @property string $content
  * @property integer $page_parent
- * @property string $page_template
+ * @property string $template
  * @property integer $created_at
  * @property integer $updated_at
  *
+ * @property Page $parent
+ * @property Page[] $children
  * @property Post[] $posts
  */
 class Page extends ActiveRecord
@@ -36,11 +38,12 @@ class Page extends ActiveRecord
     public function rules()
     {
         return [
-            [['page_path', 'page_title', 'created_at', 'updated_at'], 'required'],
-            [['page_title', 'page_content'], 'string'],
+            [['path', 'title', 'created_at', 'updated_at'], 'required'],
+            [['title', 'content'], 'string'],
             [['page_parent', 'created_at', 'updated_at'], 'integer'],
-            [['page_path'], 'string', 'max' => 120],
-            [['page_template'], 'string', 'max' => 20]
+            [['path'], 'string', 'max' => 120],
+            [['template'], 'string', 'max' => 20],
+            [['page_parent'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['page_parent' => 'id']],
         ];
     }
 
@@ -51,14 +54,30 @@ class Page extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'page_path' => 'Page Path',
-            'page_title' => 'Page Title',
-            'page_content' => 'Page Content',
+            'path' => 'Path',
+            'title' => 'Title',
+            'content' => 'Content',
             'page_parent' => 'Page Parent',
-            'page_template' => 'Page Template',
+            'template' => 'Template',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent()
+    {
+        return $this->hasOne(Page::className(), ['id' => 'page_parent']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildren()
+    {
+        return $this->hasMany(Page::className(), ['page_parent' => 'id']);
     }
 
     /**

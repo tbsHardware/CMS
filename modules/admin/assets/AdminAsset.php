@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\assets;
 
+use Yii;
 use yii\web\AssetBundle;
 
 class AdminAsset extends AssetBundle
@@ -9,15 +10,17 @@ class AdminAsset extends AssetBundle
     public $sourcePath = '@app/modules/admin/assets';
 
     public $css = [
+        'http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
+        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
+        'plugins/bootstrap-toastr/bootstrap.toastr.min.css',
         'css/layout.min.css',
         'css/components.min.css',
         'css/jui.css',
         'css/custom.css',
-        'http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
-        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
     ];
     public $js = [
         'plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
+        'plugins/bootstrap-toastr/bootstrap.toastr.min.js',
         'plugins/jquery-slimscroll/jquery.slimscroll.min.js',
         'js/app.min.js',
         'js/layout.min.js',
@@ -54,9 +57,19 @@ class AdminAsset extends AssetBundle
             $this->css[] = $this->_themesCss[$this->themeStyle];
         }
 
-        $am = \Yii::$app->assetManager;
+        $am = Yii::$app->assetManager;
         if ($am->getBundle('yii\jui\JuiAsset')) {
             $am->bundles['yii\jui\JuiAsset']->css = [];
         }
+
+        $alerts = '';
+
+        foreach (Yii::$app->session->getAllFlashes() as $type => $message) {
+            if (in_array($type, ['success', 'error', 'warning', 'info'])) {
+                $alerts .= 'toastr["' . $type . '"]("' . $message . '");';
+            }
+        }
+
+        Yii::$app->view->registerJs($alerts, \yii\web\View::POS_READY);
     }
 }

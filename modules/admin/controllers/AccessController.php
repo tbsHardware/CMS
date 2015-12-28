@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use app\modules\admin\models\Role;
 
 class AccessController extends Controller
 {
@@ -30,6 +31,18 @@ class AccessController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new Role();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel'  => $searchModel,
+        ]);
+    }
+
+    public function actionAdd()
+    {
+
+        throw new \yii\web\ForbiddenHttpException();
     }
 }

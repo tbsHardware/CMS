@@ -41,4 +41,11 @@ return [
     'In order to complete your registration, please click the link below' => 'Чтобы активировать ваш аккаунт, пожалуйста, нажмите на ссылку ниже',
     'If you cannot click the link, please try pasting the text into your browser' => 'Если вы не можете нажать на ссылку, скопируйте ее и вставьте в адресную строку вашего браузера',
     'If you did not make this request you can ignore this email' => 'P.S. Если вы получили это сообщение по ошибке, просто удалите его',
+    /* Админка */
+    'You can not block your own account!' => 'Вы не можете заблокировать свой аккаунт!',
+    'You can not remove your own account!' => 'Вы не можете удалить свой аккаунт!',
+    'User has been confirmed' => 'Пользователь активирован',
+    'User has been blocked' => 'Пользователь заблокирован',
+    'User has been unblocked' => 'Пользователь разблокирован',
+    'User has been deleted' => 'Пользователь удален',
 ];

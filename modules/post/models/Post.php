@@ -2,28 +2,27 @@
 
 namespace app\modules\post\models;
 
-use app\modules\post\models\query\PostQuery;
 use Yii;
 use yii\db\ActiveRecord;
+use app\modules\post\models\query\PostQuery;
 
 /**
  * This is the model class for table "post_post".
  *
  * @property integer $id
- * @property string $post_path
- * @property string $post_title
- * @property string $post_description
- * @property string $post_content
- * @property integer $post_date
- * @property string $post_status
+ * @property string $path
+ * @property string $title
+ * @property string $description
+ * @property string $content
+ * @property integer $date
+ * @property string $status
  * @property string $comment_status
  * @property integer $page_id
- * @property integer $user_author
+ * @property integer $author_id
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Page[] $page
- * @property $author
+ * @property Page $page
  */
 class Post extends ActiveRecord
 {
@@ -45,11 +44,12 @@ class Post extends ActiveRecord
     public function rules()
     {
         return [
-            [['post_path', 'post_title', 'post_date', 'user_author', 'created_at', 'updated_at'], 'required'],
-            [['post_title', 'post_description', 'post_content'], 'string'],
-            [['post_date', 'page_id', 'user_author', 'created_at', 'updated_at'], 'integer'],
-            [['post_path'], 'string', 'max' => 120],
-            [['post_status', 'comment_status'], 'string', 'max' => 20]
+            [['path', 'title', 'date', 'author_id', 'created_at', 'updated_at'], 'required'],
+            [['title', 'description', 'content'], 'string'],
+            [['date', 'page_id', 'author_id', 'created_at', 'updated_at'], 'integer'],
+            [['path'], 'string', 'max' => 120],
+            [['status', 'comment_status'], 'string', 'max' => 20],
+            [['page_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['page_id' => 'id']],
         ];
     }
 
@@ -60,15 +60,15 @@ class Post extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'post_path' => 'Post Path',
-            'post_title' => 'Post Title',
-            'post_description' => 'Post Description',
-            'post_content' => 'Post Content',
-            'post_date' => 'Post Date',
-            'post_status' => 'Post Status',
+            'path' => 'Path',
+            'title' => 'Title',
+            'description' => 'Description',
+            'content' => 'Content',
+            'date' => 'Date',
+            'status' => 'Status',
             'comment_status' => 'Comment Status',
             'page_id' => 'Page ID',
-            'user_author' => 'User Author',
+            'author_id' => 'Author ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
